@@ -88,6 +88,34 @@
         </div>
     </div>
 
+    <!-- Modal para seleccionar cantidad y sabores (Nuevo) -->
+    <div id="quantity-flavor-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="quantity-flavor-modal-title" class="text-xl font-bold text-gray-800"></h3>
+                <button id="close-quantity-flavor-modal-button" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="flex items-center space-x-4 my-6">
+                <label for="quantity-input" class="text-lg font-semibold text-gray-700">Cantidad de piezas:</label>
+                <input type="number" id="quantity-input" value="1" min="1" class="w-24 text-center border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <p id="quantity-flavor-modal-subtitle" class="text-gray-600 mb-4"></p>
+            <div id="quantity-flavor-options" class="grid grid-cols-2 gap-4">
+                <!-- Los botones de sabores se renderizarán aquí -->
+            </div>
+
+            <button id="confirm-quantity-flavors-button" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-green-700 transition-colors duration-300 shadow-md disabled:bg-green-400" disabled>
+                Confirmar Sabores y Añadir
+            </button>
+        </div>
+    </div>
+
     <!-- Modal del Formulario de Pedido -->
     <div id="order-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl p-8">
@@ -163,19 +191,21 @@
 
         // Array de productos disponibles con sus propiedades, incluyendo si requieren selección de sabores
         const products = [
-            { id: 1, name: 'Paquete Personal (8 pzs)', price: 85.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2 },
-            { id: 2, name: 'Paquete Dúo (14 pzs)', price: 135.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zM7 20H6a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2 },
-            { id: 3, name: 'Paquete Amigos (25 pzs)', price: 235.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2 },
-            { id: 4, name: 'Paquete Familiar (35 pzs)', price: 275.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2 },
-            { id: 5, name: 'Paquete Llenador (50 pzs)', price: 450.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.438 9.255 5 7.5 5S4.168 5.438 3 6.253v13C4.168 18.438 5.745 18 7.5 18s3.332.438 4.5 1.253m0-13C13.168 5.438 14.745 5 16.5 5c1.755 0 3.332.438 4.5 1.253v13C19.832 18.438 18.255 18 16.5 18c-1.755 0-3.332.438-4.5 1.253" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2 },
-            { id: 6, name: '1 kg (18 pzs)', price: 190.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 7 },
-            { id: 7, name: '1/2 kg (10 pzs)', price: 95.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 7 },
-            { id: 8, name: 'Orden (6 pzs)', price: 65.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 1 },
-            { id: 9, name: 'Orden Kids (4 pzs)', price: 35.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 1 },
-            { id: 10, name: 'Orden de Papas Fritas', price: 45.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0 0l3-3m-3 3l-3-3M6 13V3m0 10L3 10m3 3l3-3M18 13V3m0 10l3-3m-3 3l-3-3" /></svg>`, requiresFlavorSelection: false },
-            { id: 11, name: 'Aderezo Ranch', price: 20.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a2 2 0 114 0c0 1.223-.62 2-1.5 2.5a1.5 1.5 0 00-.5 2.5v1m.5-4h.5a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-.5a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5z" /></svg>`, requiresFlavorSelection: false },
-            { id: 12, name: 'Coca-Cola 600 ml', price: 30.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22a7 7 0 007-7h-2a5 5 0 01-5 5v-2a3 3 0 00-3-3v-2a1 1 0 011-1h1V8h-2c-1.105 0-2 .895-2 2v2a3 3 0 003 3v2a5 5 0 015-5h2a7 7 0 00-7-7" /></svg>`, requiresFlavorSelection: false },
-            { id: 13, name: 'Manzanita 600 ml', price: 30.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h8m-4-4v8m5 8a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`, requiresFlavorSelection: false },
+            { id: 1, name: 'Paquete Personal (8 pzs)', price: 85.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: false },
+            { id: 2, name: 'Paquete Dúo (14 pzs)', price: 135.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zM7 20H6a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: false },
+            { id: 3, name: 'Paquete Amigos (25 pzs)', price: 235.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: false },
+            { id: 4, name: 'Paquete Familiar (35 pzs)', price: 275.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: false },
+            { id: 5, name: 'Paquete Llenador (50 pzs)', price: 450.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.438 9.255 5 7.5 5S4.168 5.438 3 6.253v13C4.168 18.438 5.745 18 7.5 18s3.332.438 4.5 1.253m0-13C13.168 5.438 14.745 5 16.5 5c1.755 0 3.332.438 4.5 1.253v13C19.832 18.438 18.255 18 16.5 18c-1.755 0-3.332.438-4.5 1.253" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: false },
+            { id: 6, name: '1 kg (18 pzs)', price: 190.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 7, isCustomQuantity: false },
+            { id: 7, name: '1/2 kg (10 pzs)', price: 95.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 7, isCustomQuantity: false },
+            { id: 8, name: 'Orden (6 pzs)', price: 65.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 1, isCustomQuantity: false },
+            { id: 9, name: 'Orden Kids (4 pzs)', price: 35.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 1, isCustomQuantity: false },
+            { id: 10, name: 'Orden de Papas Fritas', price: 45.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0 0l3-3m-3 3l-3-3M6 13V3m0 10L3 10m3 3l3-3M18 13V3m0 10l3-3m-3 3l-3-3" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
+            { id: 11, name: 'Aderezo Ranch', price: 20.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a2 2 0 114 0c0 1.223-.62 2-1.5 2.5a1.5 1.5 0 00-.5 2.5v1m.5-4h.5a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-.5a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5z" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
+            { id: 12, name: 'Coca-Cola 600 ml', price: 30.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22a7 7 0 007-7h-2a5 5 0 01-5 5v-2a3 3 0 00-3-3v-2a1 1 0 011-1h1V8h-2c-1.105 0-2 .895-2 2v2a3 3 0 003 3v2a5 5 0 015-5h2a7 7 0 00-7-7" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
+            { id: 13, name: 'Manzanita 600 ml', price: 30.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h8m-4-4v8m5 8a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
+            { id: 14, name: 'Lunes x Pieza', price: 6.50, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673c2.227 0 3.75-1.921 3.256-4.103l-1.18-5.328a2.535 2.535 0 00-2.478-1.996h-2.102c-.93 0-1.821.5-2.298 1.353l-2.732 4.966c-.504 1.134.427 2.478 1.621 2.478zm-4.733-4.887l2.846-5.161a2.535 2.535 0 012.298-1.353h2.102c.93 0 1.821.5 2.298 1.353l2.732 4.966c.504 1.134-.427 2.478-1.621 2.478z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: true },
+            { id: 15, name: 'Martes x Pieza', price: 7.50, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, isCustomQuantity: true },
         ];
 
         // Estado del carrito de compras
@@ -206,6 +236,14 @@
         const cambioTotalSpan = document.getElementById('cambio-total');
         const clearCartButton = document.getElementById('clear-cart-button');
         const amountFieldContainer = document.getElementById('amount-field-container');
+        const quantityFlavorModal = document.getElementById('quantity-flavor-modal');
+        const closeQuantityFlavorModalButton = document.getElementById('close-quantity-flavor-modal-button');
+        const quantityFlavorModalTitle = document.getElementById('quantity-flavor-modal-title');
+        const quantityFlavorModalSubtitle = document.getElementById('quantity-flavor-modal-subtitle');
+        const quantityFlavorOptions = document.getElementById('quantity-flavor-options');
+        const confirmQuantityFlavorsButton = document.getElementById('confirm-quantity-flavors-button');
+        const quantityInput = document.getElementById('quantity-input');
+
 
         // Variables para la selección de sabores
         let selectedFlavors = [];
@@ -222,7 +260,8 @@
                     ${product.icon}
                     <h3 class="text-xl font-bold text-center mb-1">${product.name}</h3>
                     <p class="text-lg font-semibold">$${product.price.toFixed(2)}</p>
-                    <button data-id="${product.id}" data-requires-flavor="${product.requiresFlavorSelection}" class="add-to-cart-btn mt-auto bg-white text-orange-600 font-bold py-2 px-6 rounded-xl hover:bg-gray-100 transition-colors duration-300 shadow-md text-sm">
+                    ${(product.name === 'Lunes x Pieza' || product.name === 'Martes x Pieza') ? `<p class="text-xs text-gray-200 mt-1">Válido solo los ${product.name.split(' ')[0]}s</p>` : ''}
+                    <button data-id="${product.id}" data-requires-flavor="${product.requiresFlavorSelection}" data-is-custom-quantity="${product.isCustomQuantity}" class="add-to-cart-btn mt-auto bg-white text-orange-600 font-bold py-2 px-6 rounded-xl hover:bg-gray-100 transition-colors duration-300 shadow-md text-sm">
                         Añadir
                     </button>
                 `;
@@ -309,16 +348,20 @@
         }
 
         // Función para añadir un producto al carrito
-        function addToCart(product, flavors = []) {
+        function addToCart(product, quantity = 1, flavors = []) {
+            // Encuentra un ítem idéntico en el carrito (mismo id y sabores)
             const existingItem = cart.find(item => item.id === product.id && JSON.stringify(item.flavors) === JSON.stringify(flavors));
             
             if (existingItem) {
-                existingItem.quantity += 1;
+                // Si existe, aumenta su cantidad
+                existingItem.quantity += quantity;
             } else {
-                cart.push({ ...product, quantity: 1, flavors: flavors });
+                // Si no existe, agrégalo
+                cart.push({ ...product, quantity: quantity, flavors: flavors });
             }
             renderCart();
         }
+
 
         // Función para eliminar un producto del carrito
         function removeFromCart(productIndex) {
@@ -355,6 +398,29 @@
             flavorModal.classList.remove('hidden');
         }
         
+        // Función para renderizar el modal de cantidad y sabores (Nuevo)
+        function renderQuantityFlavorModal(product) {
+            currentProduct = product;
+            selectedFlavors = [];
+            quantityInput.value = 1; // Resetea la cantidad
+            quantityFlavorModalTitle.textContent = `Añadir "${product.name}"`;
+            quantityFlavorModalSubtitle.textContent = `Puedes elegir hasta ${product.maxFlavors} sabores.`;
+            quantityFlavorOptions.innerHTML = '';
+            
+            flavors.forEach(flavor => {
+                const flavorButton = document.createElement('button');
+                flavorButton.type = 'button';
+                const buttonClasses = (product.maxFlavors === 1) ? 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300 single-select' : 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300';
+                flavorButton.className = buttonClasses;
+                flavorButton.textContent = flavor;
+                flavorButton.dataset.flavor = flavor;
+                quantityFlavorOptions.appendChild(flavorButton);
+            });
+
+            confirmQuantityFlavorsButton.disabled = true;
+            quantityFlavorModal.classList.remove('hidden');
+        }
+
         // Función para actualizar el cálculo del cambio
         function updateCambio() {
             const amount = parseFloat(amountInput.value);
@@ -372,34 +438,39 @@
 
         // Event listeners
         document.addEventListener('click', (e) => {
-            // Manejar clics para añadir al carrito o abrir el modal de sabores
-            if (e.target.matches('.add-to-cart-btn')) {
-                const productId = parseInt(e.target.dataset.id);
-                const requiresFlavorSelection = e.target.dataset.requiresFlavor === 'true';
+            // Manejar clics para añadir al carrito o abrir el modal de sabores/cantidad
+            const addBtn = e.target.closest('.add-to-cart-btn');
+            if (addBtn) {
+                const productId = parseInt(addBtn.dataset.id);
+                const requiresFlavorSelection = addBtn.dataset.requiresFlavor === 'true';
+                const isCustomQuantity = addBtn.dataset.isCustomQuantity === 'true';
                 const product = products.find(p => p.id === productId);
 
-                if (requiresFlavorSelection) {
+                if (isCustomQuantity) {
+                    renderQuantityFlavorModal(product);
+                } else if (requiresFlavorSelection) {
                     renderFlavorModal(product);
                 } else {
                     addToCart(product);
                 }
             }
+
             // Manejar clics para eliminar el producto con el bote de basura
             const removeBtn = e.target.closest('.remove-from-cart-btn');
             if (removeBtn) {
                 const productIndex = parseInt(removeBtn.dataset.index);
                 removeFromCart(productIndex);
             }
-            // Manejar clics en los botones de sabores
-            if (e.target.matches('.flavor-button')) {
+            
+            // Manejar clics en los botones de sabores del modal de selección normal
+            if (e.target.matches('#flavor-options .flavor-button')) {
                 const flavor = e.target.dataset.flavor;
                 const maxFlavors = currentProduct.maxFlavors;
 
                 if (maxFlavors === 1) {
-                    // Si el máximo de sabores es 1, deseleccionar todos los demás
                     if (!selectedFlavors.includes(flavor)) {
                         selectedFlavors = [flavor];
-                        document.querySelectorAll('.flavor-button').forEach(btn => {
+                        document.querySelectorAll('#flavor-options .flavor-button').forEach(btn => {
                             btn.classList.remove('bg-orange-500', 'text-white');
                             btn.classList.add('bg-gray-200', 'text-gray-700');
                             btn.disabled = false;
@@ -407,13 +478,11 @@
                         e.target.classList.remove('bg-gray-200', 'text-gray-700');
                         e.target.classList.add('bg-orange-500', 'text-white');
                     } else {
-                        // Si ya está seleccionado, deseleccionarlo
                         selectedFlavors = [];
                         e.target.classList.remove('bg-orange-500', 'text-white');
                         e.target.classList.add('bg-gray-200', 'text-gray-700');
                     }
                 } else {
-                    // Lógica para múltiples sabores
                     e.target.classList.toggle('bg-orange-500');
                     e.target.classList.toggle('text-white');
                     e.target.classList.toggle('bg-gray-200');
@@ -427,20 +496,64 @@
                         }
                     }
 
-                    // Deshabilitar/habilitar botones según el límite
                     if (selectedFlavors.length >= maxFlavors) {
-                        document.querySelectorAll('.flavor-button:not(.bg-orange-500)').forEach(btn => {
+                        document.querySelectorAll('#flavor-options .flavor-button:not(.bg-orange-500)').forEach(btn => {
                             btn.disabled = true;
                         });
                     } else {
-                        document.querySelectorAll('.flavor-button').forEach(btn => {
+                        document.querySelectorAll('#flavor-options .flavor-button').forEach(btn => {
                             btn.disabled = false;
                         });
                     }
                 }
-
-                // Habilitar/deshabilitar el botón de confirmar sabores
                 confirmFlavorsButton.disabled = selectedFlavors.length === 0;
+            }
+
+            // Manejar clics en los botones de sabores del modal de cantidad
+            if (e.target.matches('#quantity-flavor-options .flavor-button')) {
+                const flavor = e.target.dataset.flavor;
+                const maxFlavors = currentProduct.maxFlavors;
+
+                if (maxFlavors === 1) {
+                    if (!selectedFlavors.includes(flavor)) {
+                        selectedFlavors = [flavor];
+                        document.querySelectorAll('#quantity-flavor-options .flavor-button').forEach(btn => {
+                            btn.classList.remove('bg-orange-500', 'text-white');
+                            btn.classList.add('bg-gray-200', 'text-gray-700');
+                            btn.disabled = false;
+                        });
+                        e.target.classList.remove('bg-gray-200', 'text-gray-700');
+                        e.target.classList.add('bg-orange-500', 'text-white');
+                    } else {
+                        selectedFlavors = [];
+                        e.target.classList.remove('bg-orange-500', 'text-white');
+                        e.target.classList.add('bg-gray-200', 'text-gray-700');
+                    }
+                } else {
+                    e.target.classList.toggle('bg-orange-500');
+                    e.target.classList.toggle('text-white');
+                    e.target.classList.toggle('bg-gray-200');
+                    e.target.classList.toggle('text-gray-700');
+
+                    if (selectedFlavors.includes(flavor)) {
+                        selectedFlavors = selectedFlavors.filter(f => f !== flavor);
+                    } else {
+                        if (selectedFlavors.length < maxFlavors) {
+                            selectedFlavors.push(flavor);
+                        }
+                    }
+
+                    if (selectedFlavors.length >= maxFlavors) {
+                        document.querySelectorAll('#quantity-flavor-options .flavor-button:not(.bg-orange-500)').forEach(btn => {
+                            btn.disabled = true;
+                        });
+                    } else {
+                        document.querySelectorAll('#quantity-flavor-options .flavor-button').forEach(btn => {
+                            btn.disabled = false;
+                        });
+                    }
+                }
+                confirmQuantityFlavorsButton.disabled = selectedFlavors.length === 0;
             }
         });
 
@@ -471,11 +584,26 @@
             flavorModal.classList.add('hidden');
         });
 
-        // Confirmar sabores y añadir al carrito
+        // Cerrar modal de cantidad y sabores (Nuevo)
+        closeQuantityFlavorModalButton.addEventListener('click', () => {
+            quantityFlavorModal.classList.add('hidden');
+        });
+
+        // Confirmar sabores y añadir al carrito (modal normal)
         confirmFlavorsButton.addEventListener('click', () => {
-            addToCart(currentProduct, selectedFlavors);
+            addToCart(currentProduct, 1, selectedFlavors); // Cantidad por defecto de 1
             flavorModal.classList.add('hidden');
         });
+
+        // Confirmar sabores y añadir al carrito (modal de cantidad)
+        confirmQuantityFlavorsButton.addEventListener('click', () => {
+            const quantity = parseInt(quantityInput.value);
+            if (quantity > 0) {
+                addToCart(currentProduct, quantity, selectedFlavors);
+                quantityFlavorModal.classList.add('hidden');
+            }
+        });
+
 
         // Cerrar modal de pedido
         closeButton.addEventListener('click', () => {
