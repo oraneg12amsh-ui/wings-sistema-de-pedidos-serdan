@@ -17,6 +17,21 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        .cart-mobile-view {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+            max-height: 80vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .cart-mobile-view.active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans p-4 md:p-8">
@@ -38,7 +53,7 @@
         </div>
 
         <!-- Sección del Carrito de Compras -->
-        <div class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8">
+        <div id="cart-section" class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8 lg:block hidden">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex justify-between items-center">
                 Tu Carrito
                 <button id="clear-cart-button" class="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 hidden">Vaciar Carrito</button>
@@ -65,6 +80,43 @@
                 Finalizar Pedido
             </button>
         </div>
+    </div>
+
+    <!-- Mobile Cart Button -->
+    <button id="mobile-cart-button" class="lg:hidden fixed bottom-4 right-4 bg-blue-600 text-white font-bold p-4 rounded-full shadow-lg transition-transform transform hover:scale-110 active:scale-95 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.185 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+    </button>
+    
+    <!-- Mobile Cart View -->
+    <div id="cart-mobile-view" class="cart-mobile-view bg-white rounded-t-xl shadow-lg p-6">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex justify-between items-center">
+            Tu Carrito
+            <button id="close-mobile-cart-button" class="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </h2>
+        <div id="cart-list-mobile" class="space-y-4 mb-6">
+            <p id="empty-cart-message-mobile" class="text-gray-500 text-center">El carrito está vacío.</p>
+        </div>
+        <div class="border-t pt-4">
+            <div class="flex justify-between items-center text-xl font-bold text-gray-800">
+                <span>Subtotal:</span>
+                <span id="cart-subtotal-mobile">$0.00</span>
+            </div>
+            <div class="flex justify-between items-center text-gray-600 mt-2">
+                <span>Costo de envío:</span>
+                <span id="shipping-cost-mobile">¡GRATIS!</span>
+            </div>
+            <div class="flex justify-between items-center text-2xl font-bold text-gray-800 mt-4">
+                <span>Total:</span>
+                <span id="cart-total-mobile">$0.00</span>
+            </div>
+        </div>
+        <button id="checkout-button-mobile" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-blue-700 transition-colors duration-300 shadow-md disabled:bg-blue-400" disabled>
+            Finalizar Pedido
+        </button>
     </div>
 
     <!-- Modal para seleccionar sabores -->
@@ -255,6 +307,16 @@
         const quantityInput = document.getElementById('quantity-input');
         const paymentTotalAmount = document.getElementById('payment-total-amount');
 
+        // Referencias a los nuevos elementos para móviles
+        const mobileCartButton = document.getElementById('mobile-cart-button');
+        const cartMobileView = document.getElementById('cart-mobile-view');
+        const closeMobileCartButton = document.getElementById('close-mobile-cart-button');
+        const cartListMobile = document.getElementById('cart-list-mobile');
+        const emptyCartMessageMobile = document.getElementById('empty-cart-message-mobile');
+        const cartSubtotalMobileSpan = document.getElementById('cart-subtotal-mobile');
+        const shippingCostMobileSpan = document.getElementById('shipping-cost-mobile');
+        const cartTotalMobileSpan = document.getElementById('cart-total-mobile');
+        const checkoutButtonMobile = document.getElementById('checkout-button-mobile');
 
         // Variables para la selección de sabores
         let selectedFlavors = [];
@@ -283,13 +345,19 @@
         // Función para renderizar el carrito
         function renderCart() {
             cartList.innerHTML = '';
+            cartListMobile.innerHTML = ''; // También actualizar la versión móvil
+            
             if (cart.length === 0) {
                 emptyCartMessage.classList.remove('hidden');
+                emptyCartMessageMobile.classList.remove('hidden');
                 checkoutButton.disabled = true;
+                checkoutButtonMobile.disabled = true;
                 clearCartButton.classList.add('hidden');
             } else {
                 emptyCartMessage.classList.add('hidden');
+                emptyCartMessageMobile.classList.add('hidden');
                 checkoutButton.disabled = false;
+                checkoutButtonMobile.disabled = false;
                 clearCartButton.classList.remove('hidden');
                 cart.forEach((item, index) => { // Agregué el índice para identificar el elemento
                     const cartItem = document.createElement('div');
@@ -321,6 +389,7 @@
                         </div>
                     `;
                     cartList.appendChild(cartItem);
+                    cartListMobile.appendChild(cartItem.cloneNode(true)); // Clonar para la vista móvil
                 });
             }
             updateCartTotal();
@@ -334,23 +403,34 @@
             if (subtotal > 0 && subtotal <= shippingThreshold) {
                 shippingCost = shippingCostValue;
                 shippingCostSpan.textContent = `$${shippingCost.toFixed(2)}`;
+                shippingCostMobileSpan.textContent = `$${shippingCost.toFixed(2)}`;
                 shippingCostSpan.classList.remove('text-gray-600', 'text-green-500');
+                shippingCostMobileSpan.classList.remove('text-gray-600', 'text-green-500');
                 shippingCostSpan.classList.add('text-red-500');
+                shippingCostMobileSpan.classList.add('text-red-500');
             } else if (subtotal > shippingThreshold) {
                 shippingCost = 0;
                 shippingCostSpan.textContent = '¡GRATIS!';
+                shippingCostMobileSpan.textContent = '¡GRATIS!';
                 shippingCostSpan.classList.remove('text-red-500', 'text-gray-600');
+                shippingCostMobileSpan.classList.remove('text-red-500', 'text-gray-600');
                 shippingCostSpan.classList.add('text-green-500');
+                shippingCostMobileSpan.classList.add('text-green-500');
             } else {
                  shippingCost = 0;
                 shippingCostSpan.textContent = '¡GRATIS!';
+                shippingCostMobileSpan.textContent = '¡GRATIS!';
                 shippingCostSpan.classList.remove('text-red-500', 'text-green-500');
+                shippingCostMobileSpan.classList.remove('text-red-500', 'text-green-500');
                 shippingCostSpan.classList.add('text-gray-600');
+                shippingCostMobileSpan.classList.add('text-gray-600');
             }
 
             const total = subtotal + shippingCost;
             cartSubtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
+            cartSubtotalMobileSpan.textContent = `$${subtotal.toFixed(2)}`;
             cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+            cartTotalMobileSpan.textContent = `$${total.toFixed(2)}`;
             
             // Actualizar el cálculo del cambio si el modal está visible
             if (!orderModal.classList.contains('hidden')) {
@@ -459,6 +539,9 @@
                 const requiresFlavorSelection = addBtn.dataset.requiresFlavor === 'true';
                 const isCustomQuantity = addBtn.dataset.isCustomQuantity === 'true';
                 const product = products.find(p => p.id === productId);
+
+                // Cierra la vista móvil del carrito si está activa
+                cartMobileView.classList.remove('active');
 
                 if (isCustomQuantity) {
                     renderQuantityFlavorModal(product);
@@ -600,7 +683,7 @@
         amountInput.addEventListener('input', updateCambio);
 
         // Mostrar modal de pedido
-        checkoutButton.addEventListener('click', () => {
+        const showOrderModal = () => {
             const total = parseFloat(cartTotalSpan.textContent.replace('$', ''));
             paymentTotalAmount.textContent = `$${total.toFixed(2)}`;
 
@@ -613,7 +696,12 @@
                 amountInput.value = '';
             }
             orderModal.classList.remove('hidden');
-        });
+            // Ocultar el carrito móvil al abrir el modal de pedido
+            cartMobileView.classList.remove('active');
+        };
+
+        checkoutButton.addEventListener('click', showOrderModal);
+        checkoutButtonMobile.addEventListener('click', showOrderModal);
 
         // Cerrar modal de sabores
         closeFlavorModalButton.addEventListener('click', () => {
@@ -658,6 +746,15 @@
         
         // Vaciar carrito
         clearCartButton.addEventListener('click', clearCart);
+
+        // Funciones para la vista móvil del carrito
+        mobileCartButton.addEventListener('click', () => {
+            cartMobileView.classList.add('active');
+        });
+
+        closeMobileCartButton.addEventListener('click', () => {
+            cartMobileView.classList.remove('active');
+        });
 
         // Función para generar y enviar el pedido a WhatsApp
         function sendOrderToWhatsApp(orderDetails) {
@@ -752,4 +849,3 @@
     </script>
 </body>
 </html>
-```
