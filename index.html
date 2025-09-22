@@ -17,6 +17,13 @@
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        /* Estilo para el fondo con patrón SVG */
+        body {
+            background-color: #f3f4f6;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d1d5db' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
         .cart-mobile-view {
             position: fixed;
             bottom: 0;
@@ -32,35 +39,113 @@
         .cart-mobile-view.active {
             transform: translateY(0);
         }
+        
+        /* Estilos para resaltar el carrito */
+        .highlight-cart {
+            animation: pulse-border 2s 2;
+            border: 2px solid #2563eb; 
+        }
+        .highlight-cart-mobile {
+            animation: pulse-bg 2s 2;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        @keyframes pulse-bg {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        /* Estilos para los filtros de categoría */
+        .category-filter-btn {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            background-color: #e5e7eb; /* gray-200 */
+            color: #374151; /* gray-700 */
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .category-filter-btn:hover {
+            background-color: #d1d5db; /* gray-300 */
+        }
+        .category-filter-btn.active {
+            background-color: #f97316; /* orange-500 */
+            color: white;
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-sans p-4 md:p-8">
+<body class="font-sans p-4 md:p-8">
 
-    <!-- Encabezado -->
     <header class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800">Nuestro Menú</h1>
-        <p class="text-gray-600 mt-2">Selecciona tus productos y completa tu pedido</p>
+        <h1 class="text-5xl font-extrabold text-gray-800 tracking-tight">Nuestro Menú</h1>
+        <p class="text-gray-600 mt-2 text-lg">Selecciona tus productos y completa tu pedido</p>
     </header>
+
+    <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">¿Cómo ordenar?</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+            <!-- Paso 1 -->
+            <div class="flex flex-col items-center p-4">
+                <div class="bg-orange-500 text-white rounded-full h-16 w-16 flex items-center justify-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
+                </div>
+                <h3 class="font-semibold text-gray-700">1. Selecciona Productos</h3>
+                <p class="text-sm text-gray-600 mt-1">Explora el menú y añade lo que te guste.</p>
+            </div>
+            <!-- Paso 2 -->
+            <div class="flex flex-col items-center p-4">
+                <div class="bg-orange-500 text-white rounded-full h-16 w-16 flex items-center justify-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.185 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                </div>
+                <h3 class="font-semibold text-gray-700">2. Revisa tu Carrito</h3>
+                <p class="text-sm text-gray-600 mt-1">Verifica tu selección de productos.</p>
+            </div>
+            <!-- Paso 3 -->
+            <div class="flex flex-col items-center p-4">
+                <div class="bg-orange-500 text-white rounded-full h-16 w-16 flex items-center justify-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                </div>
+                <h3 class="font-semibold text-gray-700">3. Completa tus Datos</h3>
+                <p class="text-sm text-gray-600 mt-1">Ingresa tu nombre y dirección.</p>
+            </div>
+            <!-- Paso 4 -->
+            <div class="flex flex-col items-center p-4">
+                <div class="bg-orange-500 text-white rounded-full h-16 w-16 flex items-center justify-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg>
+                </div>
+                <h3 class="font-semibold text-gray-700">4. Confirma en WhatsApp</h3>
+                <p class="text-sm text-gray-600 mt-1">Se abrirá un chat con tu pedido listo.</p>
+            </div>
+        </div>
+    </div>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- Sección de Productos -->
         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Productos Disponibles</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Productos Disponibles</h2>
+            <!-- Filtros de Categoría -->
+            <div class="flex flex-wrap justify-center gap-2 mb-6" id="category-filters">
+                <!-- Los filtros se generarán dinámicamente aquí -->
+            </div>
+            <!-- Lista de Productos -->
             <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                <!-- Los productos se renderizarán aquí dinámicamente -->
+                <!-- Los productos se renderizarán aquí -->
             </div>
         </div>
 
-        <!-- Sección del Carrito de Compras -->
-        <div id="cart-section" class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8 lg:block hidden">
+        <div id="cart-section" class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8 lg:block hidden transition-all duration-300">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex justify-between items-center">
                 Tu Carrito
                 <button id="clear-cart-button" class="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 hidden">Vaciar Carrito</button>
             </h2>
-            <div id="cart-list" class="space-y-4 mb-6">
-                <!-- Los ítems del carrito se renderizarán aquí -->
-                <p id="empty-cart-message" class="text-gray-500 text-center">El carrito está vacío.</p>
+            <div id="cart-list" class="space-y-4 mb-6 min-h-[60px]">
+                <p id="empty-cart-message" class="text-gray-500 text-center pt-4">El carrito está vacío.</p>
             </div>
             <div class="border-t pt-4">
                 <div class="flex justify-between items-center text-xl font-bold text-gray-800">
@@ -82,774 +167,461 @@
         </div>
     </div>
 
-    <!-- Mobile Cart Button -->
+    <!-- Botón de Carrito Flotante para Móviles -->
     <button id="mobile-cart-button" class="lg:hidden fixed bottom-4 right-4 bg-blue-600 text-white font-bold p-4 rounded-full shadow-lg transition-transform transform hover:scale-110 active:scale-95 z-50">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.185 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.185 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
     </button>
     
-    <!-- Mobile Cart View -->
+    <!-- Vista del Carrito para Móviles -->
     <div id="cart-mobile-view" class="cart-mobile-view bg-white rounded-t-xl shadow-lg p-6">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex justify-between items-center">
             Tu Carrito
-            <button id="close-mobile-cart-button" class="text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
+            <button id="close-mobile-cart-button" class="text-sm text-gray-500 hover:text-gray-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
         </h2>
         <div id="cart-list-mobile" class="space-y-4 mb-6">
             <p id="empty-cart-message-mobile" class="text-gray-500 text-center">El carrito está vacío.</p>
         </div>
         <div class="border-t pt-4">
-            <div class="flex justify-between items-center text-xl font-bold text-gray-800">
-                <span>Subtotal:</span>
-                <span id="cart-subtotal-mobile">$0.00</span>
-            </div>
-            <div class="flex justify-between items-center text-gray-600 mt-2">
-                <span>Costo de envío:</span>
-                <span id="shipping-cost-mobile">¡GRATIS!</span>
-            </div>
-            <div class="flex justify-between items-center text-2xl font-bold text-gray-800 mt-4">
-                <span>Total:</span>
-                <span id="cart-total-mobile">$0.00</span>
-            </div>
+            <div class="flex justify-between items-center text-xl font-bold text-gray-800"><span>Subtotal:</span><span id="cart-subtotal-mobile">$0.00</span></div>
+            <div class="flex justify-between items-center text-gray-600 mt-2"><span>Costo de envío:</span><span id="shipping-cost-mobile">¡GRATIS!</span></div>
+            <div class="flex justify-between items-center text-2xl font-bold text-gray-800 mt-4"><span>Total:</span><span id="cart-total-mobile">$0.00</span></div>
         </div>
-        <button id="checkout-button-mobile" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-blue-700 transition-colors duration-300 shadow-md disabled:bg-blue-400" disabled>
-            Finalizar Pedido
-        </button>
+        <button id="checkout-button-mobile" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-blue-700 shadow-md disabled:bg-blue-400" disabled>Finalizar Pedido</button>
     </div>
 
-    <!-- Modal para seleccionar sabores -->
-    <div id="flavor-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+    <!-- Modales -->
+    <div id="flavor-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-8">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="flavor-modal-title" class="text-xl font-bold text-gray-800"></h3>
-                <button id="close-flavor-modal-button" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <p id="flavor-modal-subtitle" class="text-gray-600 mb-6 flex justify-between">
-                <span>Puedes elegir hasta <span id="flavors-max-count"></span> sabores.</span>
-                <span>Seleccionados: <span id="flavors-selected-count">0</span></span>
-            </p>
-            <div id="flavor-options" class="grid grid-cols-2 gap-4">
-                <!-- Los botones de sabores se renderizarán aquí -->
-            </div>
-            <button id="confirm-flavors-button" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-green-700 transition-colors duration-300 shadow-md disabled:bg-green-400" disabled>
-                Confirmar Sabores
-            </button>
+            <div class="flex justify-between items-center mb-4"><h3 id="flavor-modal-title" class="text-xl font-bold text-gray-800"></h3><button id="close-flavor-modal-button" class="text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button></div>
+            <p id="flavor-modal-subtitle" class="text-gray-600 mb-6 flex justify-between"><span>Puedes elegir hasta <span id="flavors-max-count"></span> sabores.</span><span>Seleccionados: <span id="flavors-selected-count">0</span></span></p>
+            <div id="flavor-options" class="grid grid-cols-2 gap-4"></div>
+            <button id="confirm-flavors-button" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-green-700 shadow-md disabled:bg-green-400" disabled>Confirmar Sabores</button>
         </div>
     </div>
-
-    <!-- Modal para seleccionar cantidad y sabores (Nuevo) -->
-    <div id="quantity-flavor-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+    <div id="quantity-flavor-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-8">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="quantity-flavor-modal-title" class="text-xl font-bold text-gray-800"></h3>
-                <button id="close-quantity-flavor-modal-button" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="flex items-center space-x-4 my-6">
-                <label for="quantity-input" class="text-lg font-semibold text-gray-700">Cantidad de piezas:</label>
-                <input type="number" id="quantity-input" value="1" min="1" class="w-24 text-center border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <p id="quantity-flavor-modal-subtitle" class="text-gray-600 mb-4 flex justify-between">
-                <span>Puedes elegir hasta <span id="quantity-flavors-max-count"></span> sabores.</span>
-                <span>Seleccionados: <span id="quantity-flavors-selected-count">0</span></span>
-            </p>
-            <div id="quantity-flavor-options" class="grid grid-cols-2 gap-4">
-                <!-- Los botones de sabores se renderizarán aquí -->
-            </div>
-
-            <button id="confirm-quantity-flavors-button" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-green-700 transition-colors duration-300 shadow-md disabled:bg-green-400" disabled>
-                Confirmar Sabores y Añadir
-            </button>
+            <div class="flex justify-between items-center mb-4"><h3 id="quantity-flavor-modal-title" class="text-xl font-bold text-gray-800"></h3><button id="close-quantity-flavor-modal-button" class="text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button></div>
+            <div class="flex items-center space-x-4 my-6"><label for="quantity-input" class="text-lg font-semibold text-gray-700">Cantidad de piezas:</label><input type="number" id="quantity-input" value="1" min="1" class="w-24 text-center border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+            <p id="quantity-flavor-modal-subtitle" class="text-gray-600 mb-4 flex justify-between"><span>Puedes elegir hasta <span id="quantity-flavors-max-count"></span> sabores.</span><span>Seleccionados: <span id="quantity-flavors-selected-count">0</span></span></p>
+            <div id="quantity-flavor-options" class="grid grid-cols-2 gap-4"></div>
+            <button id="confirm-quantity-flavors-button" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-green-700 shadow-md disabled:bg-green-400" disabled>Confirmar y Añadir</button>
         </div>
     </div>
-
-    <!-- Modal del Formulario de Pedido -->
-    <div id="order-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+    <div id="order-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl p-8">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-800">Realiza tu Pedido</h3>
-                <button id="close-modal-button" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-gray-800">Realiza tu Pedido</h3><button id="close-modal-button" class="text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button></div>
             <form id="order-form" class="space-y-4">
-                <div>
-                    <label for="name" class="block text-gray-700 font-semibold mb-1">Nombre del Cliente</label>
-                    <input type="text" id="name" name="name" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label for="address" class="block text-gray-700 font-semibold mb-1">Dirección de Entrega</label>
-                    <input type="text" id="address" name="address" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label for="details" class="block text-gray-700 font-semibold mb-1">Características del Domicilio</label>
-                    <input type="text" id="details" name="details" placeholder="Ej: depto 3, puerta azul" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="payment" class="block text-gray-700 font-semibold mb-1">Paga con:</label>
-                    <select id="payment" name="payment" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Tarjeta">Tarjeta</option>
-                        <option value="Transferencia">Transferencia</option>
-                        <option value="Con Cambio">Con Cambio</option>
-                        <option value="Otro">Otro</option>
-                    </select>
-                </div>
-                 <div id="amount-field-container">
-                    <label for="amount" class="block text-gray-700 font-semibold mb-1">Mencione usted con cuánto va a pagar para que le entreguen su cambio</label>
-                    <input type="text" id="amount" name="amount" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="">
-                    <p class="text-right text-sm text-gray-500 mt-2">Total a pagar: <span id="payment-total-amount" class="font-bold text-gray-800"></span></p>
-                </div>
-                <div id="cambio-field" class="mt-2 text-right hidden">
-                    <p class="text-lg font-bold text-gray-800">Cambio: <span id="cambio-total">$0.00</span></p>
-                </div>
-                <div class="text-center mt-6">
-                    <p class="text-gray-600 text-sm">2452070033</p>
-                </div>
-                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300 shadow-md">
-                    Enviar por WhatsApp
-                </button>
+                <div><label for="name" class="block text-gray-700 font-semibold mb-1">Nombre del Cliente</label><input type="text" id="name" name="name" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required></div>
+                <div><label for="address" class="block text-gray-700 font-semibold mb-1">Dirección de Entrega</label><input type="text" id="address" name="address" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required></div>
+                <div><label for="details" class="block text-gray-700 font-semibold mb-1">Características del Domicilio</label><input type="text" id="details" name="details" placeholder="Ej: depto 3, puerta azul" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                <div><label for="payment" class="block text-gray-700 font-semibold mb-1">Paga con:</label><select id="payment" name="payment" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="Efectivo">Efectivo</option><option value="Tarjeta">Tarjeta</option><option value="Transferencia">Transferencia</option><option value="Con Cambio">Con Cambio</option><option value="Otro">Otro</option></select></div>
+                <div id="amount-field-container"><label for="amount" class="block text-gray-700 font-semibold mb-1">Mencione usted con cuánto va a pagar</label><input type="number" id="amount" name="amount" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00"><p class="text-right text-sm text-gray-500 mt-2">Total a pagar: <span id="payment-total-amount" class="font-bold text-gray-800"></span></p></div>
+                <div id="cambio-field" class="mt-2 text-right hidden"><p class="text-lg font-bold text-gray-800">Cambio: <span id="cambio-total">$0.00</span></p></div>
+                <div class="text-center mt-6"><a href="tel:2452070033" class="text-gray-600 text-sm hover:text-blue-600">2452070033</a></div>
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 shadow-md">Enviar por WhatsApp</button>
             </form>
         </div>
     </div>
-
-    <!-- Modal de Confirmación -->
-    <div id="confirmation-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden">
+    <div id="confirmation-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-8 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Pedido Recibido!</h3>
             <p class="text-gray-600 mb-6">Pronto nos pondremos en contacto contigo.</p>
-            <button id="close-confirmation-button" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-                Cerrar
-            </button>
+            <button id="close-confirmation-button" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700">Cerrar</button>
         </div>
     </div>
 
     <script>
-        // Definición de los sabores disponibles
+    document.addEventListener('DOMContentLoaded', () => {
         const flavors = ['Habanero', 'Valentina', 'Limón con Tajín', 'BBQ', 'Búfalo', 'Naturales', 'Ranch'];
         const bonelessFlavors = ['Habanero', 'BBQ', 'Búfalo', 'Ranch'];
+        const comboFlavors = ['Habanero', 'BBQ', 'Búfalo', 'Ranch'];
+        const shippingThreshold = 100;
+        const shippingCostValue = 15.00;
         
-        // Definición de los umbrales y costos
-        const shippingThreshold = 100; // El costo de envío se aplica si el subtotal es <= a esta cantidad
-        const shippingCostValue = 15.00; // Valor del costo de envío
-
-        // Array de productos disponibles con sus propiedades, incluyendo si requieren selección de sabores
+        // --- INICIO DE MODIFICACIÓN: Nuevos combos añadidos ---
         const products = [
-            { id: 1, name: 'Paquete Personal (8 pzs)', price: 85.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
-            { id: 2, name: 'Paquete Dúo (14 pzs)', price: 135.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zM7 20H6a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
-            { id: 3, name: 'Paquete Amigos (25 pzs)', price: 235.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
-            { id: 4, name: 'Paquete Familiar (35 pzs)', price: 275.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
-            { id: 5, name: 'Paquete Llenador (50 pzs)', price: 450.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.438 9.255 5 7.5 5S4.168 5.438 3 6.253v13C4.168 18.438 5.745 18 7.5 18s3.332.438 4.5 1.253m0-13C13.168 5.438 14.745 5 16.5 5c1.755 0 3.332.438 4.5 1.253v13C19.832 18.438 18.255 18 16.5 18c-1.755 0-3.332.438-4.5 1.253" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
-            { id: 6, name: '1 kg (18 pzs)', price: 190.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 7, flavors: flavors, isCustomQuantity: false },
-            { id: 7, name: '1/2 kg (10 pzs)', price: 95.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 7, flavors: flavors, isCustomQuantity: false },
-            { id: 8, name: 'Orden (6 pzs)', price: 65.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 1, flavors: flavors, isCustomQuantity: false },
-            { id: 9, name: 'Orden Kids (4 pzs)', price: 35.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 1, flavors: flavors, isCustomQuantity: false },
-            { id: 10, name: 'Orden de Papas Fritas', price: 45.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0 0l3-3m-3 3l-3-3M6 13V3m0 10L3 10m3 3l3-3M18 13V3m0 10l3-3m-3 3l-3-3" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
-            { id: 11, name: 'Aderezo Ranch', price: 20.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9a2 2 0 114 0c0 1.223-.62 2-1.5 2.5a1.5 1.5 0 00-.5 2.5v1m.5-4h.5a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-.5a.5.5 0 01-.5-.5v-1a.5.5 0 01.5-.5z" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
-            { id: 12, name: 'Coca-Cola 600 ml', price: 30.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22a7 7 0 007-7h-2a5 5 0 01-5 5v-2a3 3 0 00-3-3v-2a1 1 0 011-1h1V8h-2c-1.105 0-2 .895-2 2v2a3 3 0 003 3v2a5 5 0 015-5h2a7 7 0 00-7-7" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
-            { id: 13, name: 'Manzanita 600 ml', price: 30.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h8m-4-4v8m5 8a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`, requiresFlavorSelection: false, isCustomQuantity: false },
-            { id: 14, name: 'Lunes x Pieza', price: 6.50, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673c2.227 0 3.75-1.921 3.256-4.103l-1.18-5.328a2.535 2.535 0 00-2.478-1.996h-2.102c-.93 0-1.821.5-2.298 1.353l-2.732 4.966c-.504 1.134.427 2.478 1.621 2.478zm-4.733-4.887l2.846-5.161a2.535 2.535 0 012.298-1.353h2.102c.93 0 1.821.5-2.298 1.353l2.732 4.966c.504 1.134-.427 2.478-1.621 2.478z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
-            { id: 15, name: 'Martes x Pieza', price: 7.50, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
-            { id: 16, name: 'Boneless x Pieza', price: 10.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673c2.227 0 3.75-1.921 3.256-4.103l-1.18-5.328a2.535 2.535 0 00-2.478-1.996h-2.102c-.93 0-1.821.5-2.298 1.353l-2.732 4.966c-.504 1.134.427 2.478 1.621 2.478z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: true },
-            { id: 17, name: 'Orden Boneless (10 pzs)', price: 95.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
-            { id: 18, name: 'Combo Mixto Clásico (6 boneless 6 alitas)', price: 115.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13C10.832 5.438 9.255 5 7.5 5S4.168 5.438 3 6.253v13C4.168 18.438 5.745 18 7.5 18s3.332.438 4.5 1.253m0-13C13.168 5.438 14.745 5 16.5 5c1.755 0 3.332.438 4.5 1.253v13C19.832 18.438 18.255 18 16.5 18c-1.755 0-3.332.438-4.5 1.253" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
-            { id: 19, name: 'Combo Diez de Diez (10 boneless 10 alitas)', price: 195.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zM7 20H6a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
-            { id: 20, name: 'Combo Dinámico (5 boneless 5 alitas)', price: 100.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
+            { id: 1, name: 'Paquete Personal (8 pzs)', price: 85.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
+            { id: 2, name: 'Paquete Dúo (14 pzs)', price: 135.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
+            { id: 3, name: 'Paquete Amigos (25 pzs)', price: 235.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
+            { id: 4, name: 'Paquete Familiar (35 pzs)', price: 275.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
+            { id: 5, name: 'Paquete Llenador (50 pzs)', price: 450.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
+            { id: 9, name: 'Orden Kids (4 pzs)', price: 35.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 1, flavors: flavors, isCustomQuantity: false },
+            
+            { id: 18, name: 'Combo Mixto Clásico (6 boneless 6 alitas)', price: 115.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: comboFlavors, isCustomQuantity: false },
+            { id: 19, name: 'Combo Diez de Diez (10 boneless 10 alitas)', price: 195.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: comboFlavors, isCustomQuantity: false },
+            { id: 20, name: 'Combo Dinámico (5 boneless 5 alitas)', price: 100.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: comboFlavors, isCustomQuantity: false },
+
+            { id: 6, name: '1 kg (18 pzs)', price: 190.00, category: 'Alitas', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 7, flavors: flavors, isCustomQuantity: false },
+            { id: 7, name: '1/2 kg (10 pzs)', price: 95.00, category: 'Alitas', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 7, flavors: flavors, isCustomQuantity: false },
+            { id: 8, name: 'Orden (6 pzs)', price: 65.00, category: 'Alitas', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 1, flavors: flavors, isCustomQuantity: false },
+            
+            { id: 17, name: 'Orden Boneless (10 pzs)', price: 95.00, category: 'Boneless', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
+            { id: 16, name: 'Boneless x Pieza', price: 10.00, category: 'Boneless', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: true },
+
+            { id: 14, name: 'Lunes x Pieza', price: 6.50, category: 'Promociones', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
+            { id: 15, name: 'Martes x Pieza', price: 7.50, category: 'Promociones', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
+
+            { id: 10, name: 'Orden de Papas Fritas', price: 45.00, category: 'Extras', imageUrl: 'https://images.unsplash.com/photo-1576107232684-1279f390859f?q=80&w=400', placeholderText: 'Papas!', requiresFlavorSelection: false, isCustomQuantity: false },
+            { id: 11, name: 'Aderezo Ranch', price: 20.00, category: 'Extras', imageUrl: '', placeholderText: 'Aderezo', requiresFlavorSelection: false, isCustomQuantity: false },
+            
+            { id: 12, name: 'Coca-Cola 600 ml', price: 30.00, category: 'Bebidas', imageUrl: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=400', placeholderText: 'Coca-Cola', requiresFlavorSelection: false, isCustomQuantity: false },
+            { id: 13, name: 'Mundet 600 ml', price: 30.00, category: 'Bebidas', imageUrl: 'https://images.unsplash.com/photo-1610873167013-28495d6f2a68?q=80&w=400', placeholderText: 'Mundet', requiresFlavorSelection: false, isCustomQuantity: false },
         ];
+        // --- FIN DE MODIFICACIÓN ---
 
-        // Estado del carrito de compras
         let cart = [];
-
-        // Referencias a elementos del DOM
-        const productList = document.getElementById('product-list');
-        const cartList = document.getElementById('cart-list');
-        const cartSubtotalSpan = document.getElementById('cart-subtotal');
-        const shippingCostSpan = document.getElementById('shipping-cost');
-        const cartTotalSpan = document.getElementById('cart-total');
-        const emptyCartMessage = document.getElementById('empty-cart-message');
-        const checkoutButton = document.getElementById('checkout-button');
-        const orderModal = document.getElementById('order-modal');
-        const closeButton = document.getElementById('close-modal-button');
-        const orderForm = document.getElementById('order-form');
-        const confirmationModal = document.getElementById('confirmation-modal');
-        const closeConfirmationButton = document.getElementById('close-confirmation-button');
-        const flavorModal = document.getElementById('flavor-modal');
-        const closeFlavorModalButton = document.getElementById('close-flavor-modal-button');
-        const flavorModalTitle = document.getElementById('flavor-modal-title');
-        const flavorModalSubtitle = document.getElementById('flavor-modal-subtitle');
-        const flavorOptions = document.getElementById('flavor-options');
-        const confirmFlavorsButton = document.getElementById('confirm-flavors-button');
-        const paymentSelect = document.getElementById('payment');
-        const amountInput = document.getElementById('amount');
-        const cambioField = document.getElementById('cambio-field');
-        const cambioTotalSpan = document.getElementById('cambio-total');
-        const clearCartButton = document.getElementById('clear-cart-button');
-        const amountFieldContainer = document.getElementById('amount-field-container');
-        const quantityFlavorModal = document.getElementById('quantity-flavor-modal');
-        const closeQuantityFlavorModalButton = document.getElementById('close-quantity-flavor-modal-button');
-        const quantityFlavorModalTitle = document.getElementById('quantity-flavor-modal-title');
-        const quantityFlavorModalSubtitle = document.getElementById('quantity-flavor-modal-subtitle');
-        const quantityFlavorOptions = document.getElementById('quantity-flavor-options');
-        const confirmQuantityFlavorsButton = document.getElementById('confirm-quantity-flavors-button');
-        const quantityInput = document.getElementById('quantity-input');
-        const paymentTotalAmount = document.getElementById('payment-total-amount');
-
-        // Referencias a los nuevos elementos para móviles
-        const mobileCartButton = document.getElementById('mobile-cart-button');
-        const cartMobileView = document.getElementById('cart-mobile-view');
-        const closeMobileCartButton = document.getElementById('close-mobile-cart-button');
-        const cartListMobile = document.getElementById('cart-list-mobile');
-        const emptyCartMessageMobile = document.getElementById('empty-cart-message-mobile');
-        const cartSubtotalMobileSpan = document.getElementById('cart-subtotal-mobile');
-        const shippingCostMobileSpan = document.getElementById('shipping-cost-mobile');
-        const cartTotalMobileSpan = document.getElementById('cart-total-mobile');
-        const checkoutButtonMobile = document.getElementById('checkout-button-mobile');
-
-        // Variables para la selección de sabores
-        let selectedFlavors = [];
         let currentProduct = null;
-        
-        // Función para renderizar la lista de productos
-        function renderProducts() {
-            productList.innerHTML = '';
-            products.forEach(product => {
-                const productCard = document.createElement('div');
-                // Estilo del card con gradiente y esquinas redondeadas
-                productCard.className = 'bg-gradient-to-br from-orange-400 to-orange-600 text-white rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center transform transition-transform duration-200 hover:scale-105 hover:shadow-2xl cursor-pointer';
-                productCard.innerHTML = `
-                    ${product.icon}
-                    <h3 class="text-xl font-bold text-center mb-1">${product.name}</h3>
-                    <p class="text-lg font-semibold">$${product.price.toFixed(2)}</p>
-                    ${(product.name === 'Lunes x Pieza' || product.name === 'Martes x Pieza') ? `<p class="text-xs text-gray-200 mt-1">Válido solo los ${product.name.split(' ')[0]}s</p>` : ''}
-                    <button data-id="${product.id}" data-requires-flavor="${product.requiresFlavorSelection}" data-is-custom-quantity="${product.isCustomQuantity}" class="add-to-cart-btn mt-auto bg-white text-orange-600 font-bold py-2 px-6 rounded-xl hover:bg-gray-100 transition-colors duration-300 shadow-md text-sm">
-                        Añadir
-                    </button>
-                `;
-                productList.appendChild(productCard);
-            });
-        }
+        let selectedFlavors = [];
 
-        // Función para renderizar el carrito
-        function renderCart() {
-            cartList.innerHTML = '';
-            cartListMobile.innerHTML = ''; // También actualizar la versión móvil
-            
-            if (cart.length === 0) {
-                emptyCartMessage.classList.remove('hidden');
-                emptyCartMessageMobile.classList.remove('hidden');
-                checkoutButton.disabled = true;
-                checkoutButtonMobile.disabled = true;
-                clearCartButton.classList.add('hidden');
-            } else {
-                emptyCartMessage.classList.add('hidden');
-                emptyCartMessageMobile.classList.add('hidden');
-                checkoutButton.disabled = false;
-                checkoutButtonMobile.disabled = false;
-                clearCartButton.classList.remove('hidden');
-                cart.forEach((item, index) => { // Agregué el índice para identificar el elemento
-                    const cartItem = document.createElement('div');
-                    cartItem.className = 'flex justify-between items-center p-3 bg-gray-50 rounded-lg';
-                    
-                    // Mostrar los sabores seleccionados si existen
-                    let flavorsText = '';
-                    if (item.flavors && item.flavors.length > 0) {
-                        flavorsText = `<p class="text-xs text-gray-500 mt-1">Sabores: ${item.flavors.join(', ')}</p>`;
-                    }
+        // Selectores del DOM
+        const productList = document.getElementById('product-list');
+        const cartElements = {
+            list: document.getElementById('cart-list'),
+            subtotal: document.getElementById('cart-subtotal'),
+            shipping: document.getElementById('shipping-cost'),
+            total: document.getElementById('cart-total'),
+            emptyMsg: document.getElementById('empty-cart-message'),
+            checkoutBtn: document.getElementById('checkout-button'),
+            clearBtn: document.getElementById('clear-cart-button'),
+        };
+        const mobileCartElements = {
+            view: document.getElementById('cart-mobile-view'),
+            list: document.getElementById('cart-list-mobile'),
+            subtotal: document.getElementById('cart-subtotal-mobile'),
+            shipping: document.getElementById('shipping-cost-mobile'),
+            total: document.getElementById('cart-total-mobile'),
+            emptyMsg: document.getElementById('empty-cart-message-mobile'),
+            checkoutBtn: document.getElementById('checkout-button-mobile'),
+            openBtn: document.getElementById('mobile-cart-button'),
+            closeBtn: document.getElementById('close-mobile-cart-button'),
+        };
+        const orderModalElements = {
+            modal: document.getElementById('order-modal'),
+            form: document.getElementById('order-form'),
+            closeBtn: document.getElementById('close-modal-button'),
+            paymentSelect: document.getElementById('payment'),
+            amountContainer: document.getElementById('amount-field-container'),
+            amountInput: document.getElementById('amount'),
+            cambioField: document.getElementById('cambio-field'),
+            cambioTotal: document.getElementById('cambio-total'),
+            paymentTotal: document.getElementById('payment-total-amount'),
+        };
+        const flavorModalElements = {
+            modal: document.getElementById('flavor-modal'),
+            title: document.getElementById('flavor-modal-title'),
+            maxCount: document.getElementById('flavors-max-count'),
+            selectedCount: document.getElementById('flavors-selected-count'),
+            options: document.getElementById('flavor-options'),
+            confirmBtn: document.getElementById('confirm-flavors-button'),
+            closeBtn: document.getElementById('close-flavor-modal-button'),
+        };
+        const qtyFlavorModalElements = {
+            modal: document.getElementById('quantity-flavor-modal'),
+            title: document.getElementById('quantity-flavor-modal-title'),
+            quantityInput: document.getElementById('quantity-input'),
+            maxCount: document.getElementById('quantity-flavors-max-count'),
+            selectedCount: document.getElementById('quantity-flavors-selected-count'),
+            options: document.getElementById('quantity-flavor-options'),
+            confirmBtn: document.getElementById('confirm-quantity-flavors-button'),
+            closeBtn: document.getElementById('close-quantity-flavor-modal-button'),
+        };
+        const confirmationModal = document.getElementById('confirmation-modal');
 
-                    cartItem.innerHTML = `
-                        <div>
-                            <div class="flex items-center">
-                                <span class="font-bold text-gray-800">${item.quantity}x</span>
-                                <span class="ml-3 text-gray-700">${item.name}</span>
-                            </div>
-                            ${flavorsText}
-                        </div>
-                        <div class="flex items-center">
-                            <span class="text-blue-600 font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
-                            <div class="flex items-center ml-4 space-x-2">
-                                <button data-index="${index}" class="remove-from-cart-btn text-red-500 hover:text-red-700 transition-colors duration-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.013 21H7.987a2 2 0 01-1.92-1.858L5 7m5 4v6m4-6v6m1-9V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    cartList.appendChild(cartItem);
-                    cartListMobile.appendChild(cartItem.cloneNode(true)); // Clonar para la vista móvil
-                });
-            }
-            updateCartTotal();
-        }
-
-        // Función para actualizar el total del carrito y el costo de envío
-        function updateCartTotal() {
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            
-            let shippingCost = 0;
-            if (subtotal > 0 && subtotal <= shippingThreshold) {
-                shippingCost = shippingCostValue;
-                shippingCostSpan.textContent = `$${shippingCost.toFixed(2)}`;
-                shippingCostMobileSpan.textContent = `$${shippingCost.toFixed(2)}`;
-                shippingCostSpan.classList.remove('text-gray-600', 'text-green-500');
-                shippingCostMobileSpan.classList.remove('text-gray-600', 'text-green-500');
-                shippingCostSpan.classList.add('text-red-500');
-                shippingCostMobileSpan.classList.add('text-red-500');
-            } else if (subtotal > shippingThreshold) {
-                shippingCost = 0;
-                shippingCostSpan.textContent = '¡GRATIS!';
-                shippingCostMobileSpan.textContent = '¡GRATIS!';
-                shippingCostSpan.classList.remove('text-red-500', 'text-gray-600');
-                shippingCostMobileSpan.classList.remove('text-red-500', 'text-gray-600');
-                shippingCostSpan.classList.add('text-green-500');
-                shippingCostMobileSpan.classList.add('text-green-500');
-            } else {
-                 shippingCost = 0;
-                shippingCostSpan.textContent = '¡GRATIS!';
-                shippingCostMobileSpan.textContent = '¡GRATIS!';
-                shippingCostSpan.classList.remove('text-red-500', 'text-green-500');
-                shippingCostMobileSpan.classList.remove('text-red-500', 'text-green-500');
-                shippingCostSpan.classList.add('text-gray-600');
-                shippingCostMobileSpan.classList.add('text-gray-600');
-            }
-
-            const total = subtotal + shippingCost;
-            cartSubtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
-            cartSubtotalMobileSpan.textContent = `$${subtotal.toFixed(2)}`;
-            cartTotalSpan.textContent = `$${total.toFixed(2)}`;
-            cartTotalMobileSpan.textContent = `$${total.toFixed(2)}`;
-            
-            // Actualizar el cálculo del cambio si el modal está visible
-            if (!orderModal.classList.contains('hidden')) {
-                updateCambio();
-                paymentTotalAmount.textContent = `$${total.toFixed(2)}`;
-            }
-        }
-
-        // Función para añadir un producto al carrito
-        function addToCart(product, quantity = 1, flavors = []) {
-            // Encuentra un ítem idéntico en el carrito (mismo id y sabores)
-            const existingItem = cart.find(item => item.id === product.id && JSON.stringify(item.flavors) === JSON.stringify(flavors));
-            
-            if (existingItem) {
-                // Si existe, aumenta su cantidad
-                existingItem.quantity += quantity;
-            } else {
-                // Si no existe, agrégalo
-                cart.push({ ...product, quantity: quantity, flavors: flavors });
-            }
-            renderCart();
-        }
-
-        // Función para eliminar un producto del carrito
-        function removeFromCart(productIndex) {
-            cart.splice(productIndex, 1);
-            renderCart();
-        }
-        
-        // Función para vaciar el carrito
-        function clearCart() {
-            cart = [];
-            renderCart();
-        }
-
-        // Función para renderizar el modal de sabores
-        function renderFlavorModal(product) {
-            currentProduct = product;
-            selectedFlavors = [];
-            flavorModalTitle.textContent = `Elige tus Sabores (${product.name})`;
-            document.getElementById('flavors-max-count').textContent = product.maxFlavors;
-            document.getElementById('flavors-selected-count').textContent = 0;
-            flavorOptions.innerHTML = '';
-
-            const flavorsToUse = product.flavors;
-            flavorsToUse.forEach(flavor => {
-                const flavorButton = document.createElement('button');
-                flavorButton.type = 'button';
-                const buttonClasses = (product.maxFlavors === 1) ? 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300 single-select' : 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300';
-                flavorButton.className = buttonClasses;
-                flavorButton.textContent = flavor;
-                flavorButton.dataset.flavor = flavor;
-                flavorOptions.appendChild(flavorButton);
-            });
-
-            confirmFlavorsButton.disabled = true;
-            flavorModal.classList.remove('hidden');
-        }
-        
-        // Función para renderizar el modal de cantidad y sabores (Nuevo)
-        function renderQuantityFlavorModal(product) {
-            currentProduct = product;
-            selectedFlavors = [];
-            quantityInput.value = 1; // Resetea la cantidad
-            quantityFlavorModalTitle.textContent = `Añadir "${product.name}"`;
-            document.getElementById('quantity-flavors-max-count').textContent = product.maxFlavors;
-            document.getElementById('quantity-flavors-selected-count').textContent = 0;
-            quantityFlavorOptions.innerHTML = '';
-            
-            const flavorsToUse = product.flavors;
-            flavorsToUse.forEach(flavor => {
-                const flavorButton = document.createElement('button');
-                flavorButton.type = 'button';
-                const buttonClasses = (product.maxFlavors === 1) ? 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300 single-select' : 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300';
-                flavorButton.className = buttonClasses;
-                flavorButton.textContent = flavor;
-                flavorButton.dataset.flavor = flavor;
-                quantityFlavorOptions.appendChild(flavorButton);
-            });
-
-            confirmQuantityFlavorsButton.disabled = true;
-            quantityFlavorModal.classList.remove('hidden');
-        }
-
-        // Función para actualizar el cálculo del cambio
-        function updateCambio() {
-            const amount = parseFloat(amountInput.value);
-            const total = parseFloat(cartTotalSpan.textContent.replace('$', ''));
-            
-            if ((paymentSelect.value === 'Con Cambio' || paymentSelect.value === 'Efectivo') && !isNaN(amount) && amount >= total) {
-                const cambio = amount - total;
-                cambioTotalSpan.textContent = `$${cambio.toFixed(2)}`;
-                cambioField.classList.remove('hidden');
-            } else {
-                cambioField.classList.add('hidden');
-                cambioTotalSpan.textContent = `$0.00`;
-            }
-        }
-
-        // Event listeners
-        document.addEventListener('click', (e) => {
-            // Manejar clics para añadir al carrito o abrir el modal de sabores/cantidad
-            const addBtn = e.target.closest('.add-to-cart-btn');
-            if (addBtn) {
-                const productId = parseInt(addBtn.dataset.id);
-                const requiresFlavorSelection = addBtn.dataset.requiresFlavor === 'true';
-                const isCustomQuantity = addBtn.dataset.isCustomQuantity === 'true';
-                const product = products.find(p => p.id === productId);
-
-                // Cierra la vista móvil del carrito si está activa
-                cartMobileView.classList.remove('active');
-
-                if (isCustomQuantity) {
-                    renderQuantityFlavorModal(product);
-                } else if (requiresFlavorSelection) {
-                    renderFlavorModal(product);
-                } else {
-                    addToCart(product);
-                }
-            }
-
-            // Manejar clics para eliminar el producto con el bote de basura
-            const removeBtn = e.target.closest('.remove-from-cart-btn');
-            if (removeBtn) {
-                const productIndex = parseInt(removeBtn.dataset.index);
-                removeFromCart(productIndex);
-            }
-            
-            // Manejar clics en los botones de sabores del modal de selección normal
-            if (e.target.matches('#flavor-options .flavor-button')) {
-                const flavor = e.target.dataset.flavor;
-                const maxFlavors = currentProduct.maxFlavors;
-
-                if (maxFlavors === 1) {
-                    if (!selectedFlavors.includes(flavor)) {
-                        selectedFlavors = [flavor];
-                        document.querySelectorAll('#flavor-options .flavor-button').forEach(btn => {
-                            btn.classList.remove('bg-orange-500', 'text-white');
-                            btn.classList.add('bg-gray-200', 'text-gray-700');
-                            btn.disabled = false;
-                        });
-                        e.target.classList.remove('bg-gray-200', 'text-gray-700');
-                        e.target.classList.add('bg-orange-500', 'text-white');
-                    } else {
-                        selectedFlavors = [];
-                        e.target.classList.remove('bg-orange-500', 'text-white');
-                        e.target.classList.add('bg-gray-200', 'text-gray-700');
-                    }
-                } else {
-                    e.target.classList.toggle('bg-orange-500');
-                    e.target.classList.toggle('text-white');
-                    e.target.classList.toggle('bg-gray-200');
-                    e.target.classList.toggle('text-gray-700');
-
-                    if (selectedFlavors.includes(flavor)) {
-                        selectedFlavors = selectedFlavors.filter(f => f !== flavor);
-                    } else {
-                        if (selectedFlavors.length < maxFlavors) {
-                            selectedFlavors.push(flavor);
-                        }
-                    }
-
-                    if (selectedFlavors.length >= maxFlavors) {
-                        document.querySelectorAll('#flavor-options .flavor-button:not(.bg-orange-500)').forEach(btn => {
-                            btn.disabled = true;
-                        });
-                    } else {
-                        document.querySelectorAll('#flavor-options .flavor-button').forEach(btn => {
-                            btn.disabled = false;
-                        });
-                    }
-                }
-                document.getElementById('flavors-selected-count').textContent = selectedFlavors.length;
-                confirmFlavorsButton.disabled = selectedFlavors.length === 0;
-            }
-
-            // Manejar clics en los botones de sabores del modal de cantidad
-            if (e.target.matches('#quantity-flavor-options .flavor-button')) {
-                const flavor = e.target.dataset.flavor;
-                const maxFlavors = currentProduct.maxFlavors;
-
-                if (maxFlavors === 1) {
-                    if (!selectedFlavors.includes(flavor)) {
-                        selectedFlavors = [flavor];
-                        document.querySelectorAll('#quantity-flavor-options .flavor-button').forEach(btn => {
-                            btn.classList.remove('bg-orange-500', 'text-white');
-                            btn.classList.add('bg-gray-200', 'text-gray-700');
-                            btn.disabled = false;
-                        });
-                        e.target.classList.remove('bg-gray-200', 'text-gray-700');
-                        e.target.classList.add('bg-orange-500', 'text-white');
-                    } else {
-                        selectedFlavors = [];
-                        e.target.classList.remove('bg-orange-500', 'text-white');
-                        e.target.classList.add('bg-gray-200', 'text-gray-700');
-                    }
-                } else {
-                    e.target.classList.toggle('bg-orange-500');
-                    e.target.classList.toggle('text-white');
-                    e.target.classList.toggle('bg-gray-200');
-                    e.target.classList.toggle('text-gray-700');
-
-                    if (selectedFlavors.includes(flavor)) {
-                        selectedFlavors = selectedFlavors.filter(f => f !== flavor);
-                    } else {
-                        if (selectedFlavors.length < maxFlavors) {
-                            selectedFlavors.push(flavor);
-                        }
-                    }
-
-                    if (selectedFlavors.length >= maxFlavors) {
-                        document.querySelectorAll('#quantity-flavor-options .flavor-button:not(.bg-orange-500)').forEach(btn => {
-                            btn.disabled = true;
-                        });
-                    } else {
-                        document.querySelectorAll('#quantity-flavor-options .flavor-button').forEach(btn => {
-                            btn.disabled = false;
-                        });
-                    }
-                }
-                document.getElementById('quantity-flavors-selected-count').textContent = selectedFlavors.length;
-                confirmQuantityFlavorsButton.disabled = selectedFlavors.length === 0;
-            }
-        });
-
-        // Evento de cambio para el campo de pago
-        paymentSelect.addEventListener('change', (e) => {
-            const total = parseFloat(cartTotalSpan.textContent.replace('$', ''));
-            const selectedPayment = e.target.value;
-
-            // Mostrar el campo de monto de pago solo para Efectivo y Con Cambio
-            if (selectedPayment === 'Con Cambio' || selectedPayment === 'Efectivo') {
-                amountFieldContainer.classList.remove('hidden');
-            } else {
-                amountFieldContainer.classList.add('hidden');
-            }
-
-            // Comportamiento específico para cada opción
-            if (selectedPayment === 'Con Cambio') {
-                amountInput.value = total.toFixed(2);
-            } else if (selectedPayment === 'Efectivo') {
-                amountInput.value = '';
-            } else {
-                amountInput.value = '';
-            }
-            updateCambio();
-        });
-
-        // Evento para el cálculo del cambio al escribir en el campo
-        amountInput.addEventListener('input', updateCambio);
-
-        // Mostrar modal de pedido
-        const showOrderModal = () => {
-            const total = parseFloat(cartTotalSpan.textContent.replace('$', ''));
-            paymentTotalAmount.textContent = `$${total.toFixed(2)}`;
-
-            const selectedPayment = paymentSelect.value;
-            if (selectedPayment === 'Con Cambio') {
-                amountInput.value = total.toFixed(2);
-            } else if (selectedPayment === 'Efectivo') {
-                amountInput.value = '';
-            } else {
-                amountInput.value = '';
-            }
-            orderModal.classList.remove('hidden');
-            // Ocultar el carrito móvil al abrir el modal de pedido
-            cartMobileView.classList.remove('active');
+        const renderCategoryFilters = () => {
+            const filtersContainer = document.getElementById('category-filters');
+            const categories = ['Todos', ...new Set(products.map(p => p.category))];
+            filtersContainer.innerHTML = categories.map((category, index) => 
+                `<button class="category-filter-btn ${index === 0 ? 'active' : ''}" data-category="${category}">${category}</button>`
+            ).join('');
         };
 
-        checkoutButton.addEventListener('click', showOrderModal);
-        checkoutButtonMobile.addEventListener('click', showOrderModal);
+        const handleCategoryFilter = (e) => {
+            if (e.target.matches('.category-filter-btn')) {
+                const selectedCategory = e.target.dataset.category;
+                document.querySelectorAll('.category-filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                renderProducts(selectedCategory);
+            }
+        };
+        
+        const renderProducts = (filterCategory = 'Todos') => {
+            productList.innerHTML = '';
+            const filteredProducts = filterCategory === 'Todos' ? products : products.filter(p => p.category === filterCategory);
+            
+            if (filteredProducts.length === 0) {
+                productList.innerHTML = `<p class="text-gray-500 col-span-full text-center">No hay productos en esta categoría.</p>`;
+                return;
+            }
 
-        // Cerrar modal de sabores
-        closeFlavorModalButton.addEventListener('click', () => {
-            flavorModal.classList.add('hidden');
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer';
+                productCard.innerHTML = `
+                    <img src="${product.imageUrl}&auto=format&fit=crop&w=400" alt="${product.name}" class="w-full h-40 object-cover" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x300/f97316/white?text=${product.placeholderText}';" >
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 flex-grow">${product.name}</h3>
+                        <p class="text-xl font-semibold text-blue-600 mb-3">$${product.price.toFixed(2)}</p>
+                        <button data-id="${product.id}" class="add-to-cart-btn mt-auto bg-orange-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors duration-300 shadow-md text-sm">Añadir</button>
+                    </div>`;
+                
+                productCard.addEventListener('click', (e) => {
+                     if (!e.target.matches('.add-to-cart-btn')) {
+                         productCard.querySelector('.add-to-cart-btn').click();
+                     }
+                });
+                productList.appendChild(productCard);
+            });
+        };
+        
+        const renderCart = () => {
+            const renderList = (listEl, emptyMsgEl) => {
+                listEl.innerHTML = '';
+                if (cart.length === 0) {
+                    listEl.appendChild(emptyMsgEl);
+                    emptyMsgEl.classList.remove('hidden');
+                } else {
+                    emptyMsgEl.classList.add('hidden');
+                    cart.forEach((item, index) => {
+                        const flavorsText = item.flavors && item.flavors.length > 0 ? `<p class="text-xs text-gray-500 mt-1">Sabores: ${item.flavors.join(', ')}</p>` : '';
+                        const cartItem = document.createElement('div');
+                        cartItem.className = 'flex justify-between items-center p-3 bg-gray-50 rounded-lg';
+                        cartItem.innerHTML = `
+                            <div>
+                                <div class="flex items-center"><span class="font-bold text-gray-800">${item.quantity}x</span><span class="ml-3 text-gray-700">${item.name}</span></div>
+                                ${flavorsText}
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-blue-600 font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
+                                <button data-index="${index}" class="remove-from-cart-btn text-red-500 hover:text-red-700 ml-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.013 21H7.987a2 2 0 01-1.92-1.858L5 7m5 4v6m4-6v6m1-9V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+                            </div>`;
+                        listEl.appendChild(cartItem);
+                    });
+                }
+            };
+            renderList(cartElements.list, cartElements.emptyMsg);
+            renderList(mobileCartElements.list, mobileCartElements.emptyMsg);
+            updateCartTotal();
+            cartElements.checkoutBtn.disabled = mobileCartElements.checkoutBtn.disabled = cart.length === 0;
+            cartElements.clearBtn.classList.toggle('hidden', cart.length === 0);
+        };
+        
+        const updateCartTotal = () => {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let shippingCost = (subtotal > 0 && subtotal <= shippingThreshold) ? shippingCostValue : 0;
+            const total = subtotal + shippingCost;
+            
+            const updateSpans = (subtotalSpan, shippingSpan, totalSpan) => {
+                subtotalSpan.textContent = `$${subtotal.toFixed(2)}`;
+                totalSpan.textContent = `$${total.toFixed(2)}`;
+                shippingSpan.textContent = shippingCost > 0 ? `$${shippingCost.toFixed(2)}` : '¡GRATIS!';
+                shippingSpan.className = `font-semibold ${shippingCost > 0 ? 'text-red-500' : (subtotal > 0 ? 'text-green-500' : 'text-gray-600')}`;
+            };
+
+            updateSpans(cartElements.subtotal, cartElements.shipping, cartElements.total);
+            updateSpans(mobileCartElements.subtotal, mobileCartElements.shipping, mobileCartElements.total);
+            
+            if (!orderModalElements.modal.classList.contains('hidden')) {
+                orderModalElements.paymentTotal.textContent = `$${total.toFixed(2)}`;
+                updateCambio();
+            }
+        };
+
+        const updateCambio = () => {
+            const total = parseFloat(cartElements.total.textContent.replace('$', ''));
+            const amount = parseFloat(orderModalElements.amountInput.value);
+            const isCashPayment = ['Con Cambio', 'Efectivo'].includes(orderModalElements.paymentSelect.value);
+
+            if (isCashPayment && !isNaN(amount) && amount >= total) {
+                const cambio = amount - total;
+                orderModalElements.cambioTotal.textContent = `$${cambio.toFixed(2)}`;
+                orderModalElements.cambioField.classList.remove('hidden');
+            } else {
+                orderModalElements.cambioField.classList.add('hidden');
+            }
+        };
+
+        const addToCart = (product, quantity = 1, flavors = []) => {
+            const wasCartEmpty = cart.length === 0;
+            const existingItem = cart.find(item => item.id === product.id && JSON.stringify(item.flavors) === JSON.stringify(flavors));
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity, flavors });
+            }
+            renderCart();
+            if (wasCartEmpty) {
+                cartElements.clearBtn.closest('div').classList.add('highlight-cart');
+                mobileCartElements.openBtn.classList.add('highlight-cart-mobile');
+                setTimeout(() => {
+                    cartElements.clearBtn.closest('div').classList.remove('highlight-cart');
+                    mobileCartElements.openBtn.classList.remove('highlight-cart-mobile');
+                }, 4000);
+            }
+        };
+        
+        const openFlavorModal = (modalElements, product, hasQuantityInput = false) => {
+            currentProduct = product;
+            selectedFlavors = [];
+            modalElements.modal.classList.remove('hidden');
+            modalElements.title.textContent = `Añadir "${product.name}"`;
+            modalElements.maxCount.textContent = product.maxFlavors;
+            modalElements.selectedCount.textContent = '0';
+            modalElements.options.innerHTML = '';
+            
+            if(hasQuantityInput) modalElements.quantityInput.value = 1;
+
+            if (product.flavors && Array.isArray(product.flavors)) {
+                product.flavors.forEach(flavor => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'flavor-button bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-full transition-colors duration-200 hover:bg-gray-300';
+                    btn.textContent = flavor;
+                    btn.dataset.flavor = flavor;
+                    modalElements.options.appendChild(btn);
+                });
+            }
+            modalElements.confirmBtn.disabled = true;
+        };
+
+        const handleFlavorSelection = (e, modalElements) => {
+            if (!e.target.matches('.flavor-button')) return;
+            const flavor = e.target.dataset.flavor;
+            const maxFlavors = currentProduct.maxFlavors;
+            const isSelected = selectedFlavors.includes(flavor);
+
+            if (maxFlavors === 1) {
+                selectedFlavors = isSelected ? [] : [flavor];
+            } else {
+                if (isSelected) {
+                    selectedFlavors = selectedFlavors.filter(f => f !== flavor);
+                } else if (selectedFlavors.length < maxFlavors) {
+                    selectedFlavors.push(flavor);
+                }
+            }
+
+            modalElements.options.querySelectorAll('.flavor-button').forEach(btn => {
+                const f = btn.dataset.flavor;
+                const active = selectedFlavors.includes(f);
+                btn.classList.toggle('bg-orange-500', active);
+                btn.classList.toggle('text-white', active);
+                btn.classList.toggle('bg-gray-200', !active);
+                btn.classList.toggle('text-gray-700', !active);
+                btn.disabled = selectedFlavors.length >= maxFlavors && !selectedFlavors.includes(f);
+            });
+            
+            modalElements.selectedCount.textContent = selectedFlavors.length;
+            modalElements.confirmBtn.disabled = selectedFlavors.length === 0;
+        };
+        
+        const sendOrderToWhatsApp = (orderDetails) => {
+            const phoneNumber = '522452070033';
+            let message = `¡Hola! 👋 Tengo un nuevo pedido:\n\n` +
+                `*Cliente*: ${orderDetails.customer.name}\n` +
+                `*Dirección*: ${orderDetails.customer.address}\n` +
+                (orderDetails.customer.details ? `*Características*: ${orderDetails.customer.details}\n` : '') +
+                `\n*Forma de pago*: ${orderDetails.customer.payment}` +
+                ((orderDetails.customer.payment === 'Efectivo' || orderDetails.customer.payment === 'Con Cambio') && orderDetails.customer.amount ? ` (paga con: $${parseFloat(orderDetails.customer.amount).toFixed(2)})` : '') +
+                (orderDetails.cambio > 0 ? `\n*Cambio*: $${orderDetails.cambio.toFixed(2)}` : '') +
+                `\n\n*Productos*:\n` +
+                orderDetails.items.map(item =>
+                    `- ${item.quantity}x ${item.name}` +
+                    (item.flavors && item.flavors.length > 0 ? ` (Sabores: ${item.flavors.join(', ')})` : '') +
+                    ` ($${item.price.toFixed(2)} c/u)`
+                ).join('\n') +
+                `\n\n*Subtotal*: $${orderDetails.subtotal.toFixed(2)}\n` +
+                `*Costo de envío*: ${orderDetails.shippingCost > 0 ? '$' + orderDetails.shippingCost.toFixed(2) : '¡GRATIS!'}\n` +
+                `*Total*: $${orderDetails.total.toFixed(2)}`;
+
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        };
+
+        // Event Listeners
+        document.addEventListener('click', (e) => {
+            const addBtn = e.target.closest('.add-to-cart-btn');
+            if (addBtn) {
+                const product = products.find(p => p.id === parseInt(addBtn.dataset.id));
+                mobileCartElements.view.classList.remove('active');
+                if (product.isCustomQuantity) openFlavorModal(qtyFlavorModalElements, product, true);
+                else if (product.requiresFlavorSelection) openFlavorModal(flavorModalElements, product);
+                else addToCart(product);
+            }
+            if (e.target.closest('.remove-from-cart-btn')) {
+                cart.splice(parseInt(e.target.closest('.remove-from-cart-btn').dataset.index), 1);
+                renderCart();
+            }
         });
 
-        // Cerrar modal de cantidad y sabores (Nuevo)
-        closeQuantityFlavorModalButton.addEventListener('click', () => {
-            quantityFlavorModal.classList.add('hidden');
+        document.getElementById('category-filters').addEventListener('click', handleCategoryFilter);
+        flavorModalElements.options.addEventListener('click', (e) => handleFlavorSelection(e, flavorModalElements));
+        qtyFlavorModalElements.options.addEventListener('click', (e) => handleFlavorSelection(e, qtyFlavorModalElements));
+        
+        flavorModalElements.confirmBtn.addEventListener('click', () => {
+            addToCart(currentProduct, 1, selectedFlavors);
+            flavorModalElements.modal.classList.add('hidden');
         });
-
-        // Confirmar sabores y añadir al carrito (modal normal)
-        confirmFlavorsButton.addEventListener('click', () => {
-            addToCart(currentProduct, 1, selectedFlavors); // Cantidad por defecto de 1
-            flavorModal.classList.add('hidden');
-        });
-
-        // Confirmar sabores y añadir al carrito (modal de cantidad)
-        confirmQuantityFlavorsButton.addEventListener('click', () => {
-            const quantity = parseInt(quantityInput.value);
+        qtyFlavorModalElements.confirmBtn.addEventListener('click', () => {
+            const quantity = parseInt(qtyFlavorModalElements.quantityInput.value);
             if (quantity > 0) {
                 addToCart(currentProduct, quantity, selectedFlavors);
-                quantityFlavorModal.classList.add('hidden');
+                qtyFlavorModalElements.modal.classList.add('hidden');
             }
-        });
-
-
-        // Cerrar modal de pedido
-        closeButton.addEventListener('click', () => {
-            orderModal.classList.add('hidden');
-        });
-
-        // Cerrar modal de confirmación
-        closeConfirmationButton.addEventListener('click', () => {
-            confirmationModal.classList.add('hidden');
-            orderModal.classList.add('hidden');
-            // Limpiar el carrito y el formulario después de confirmar
-            cart = [];
-            orderForm.reset();
-            renderCart();
         });
         
-        // Vaciar carrito
-        clearCartButton.addEventListener('click', clearCart);
-
-        // Funciones para la vista móvil del carrito
-        mobileCartButton.addEventListener('click', () => {
-            cartMobileView.classList.add('active');
+        const showOrderModal = () => {
+            const total = parseFloat(cartElements.total.textContent.replace('$', ''));
+            orderModalElements.paymentTotal.textContent = `$${total.toFixed(2)}`;
+            orderModalElements.paymentSelect.dispatchEvent(new Event('change'));
+            orderModalElements.modal.classList.remove('hidden');
+            mobileCartElements.view.classList.remove('active');
+        };
+        
+        cartElements.checkoutBtn.addEventListener('click', showOrderModal);
+        mobileCartElements.checkoutBtn.addEventListener('click', showOrderModal);
+        orderModalElements.paymentSelect.addEventListener('change', () => {
+            const isCash = ['Con Cambio', 'Efectivo'].includes(orderModalElements.paymentSelect.value);
+            orderModalElements.amountContainer.classList.toggle('hidden', !isCash);
+            updateCambio();
         });
-
-        closeMobileCartButton.addEventListener('click', () => {
-            cartMobileView.classList.remove('active');
-        });
-
-        // Función para generar y enviar el pedido a WhatsApp
-        function sendOrderToWhatsApp(orderDetails) {
-            // Reemplaza '522452070033' con tu número de teléfono de WhatsApp (incluyendo código de país)
-            const phoneNumber = '522452070033'; 
-            let message = `¡Hola! 👋 Tengo un nuevo pedido:\n\n`;
-
-            // Agregar los detalles del cliente
-            message += `*Cliente*: ${orderDetails.customer.name}\n`;
-            message += `*Teléfono*: ${orderDetails.customer.phone}\n`;
-            message += `*Dirección*: ${orderDetails.customer.address}\n`;
-            if (orderDetails.customer.details) {
-                message += `*Características*: ${orderDetails.customer.details}\n`;
-            }
-            message += `\n*Forma de pago*: ${orderDetails.customer.payment}`;
-            if (orderDetails.customer.amount) {
-                 message += ` (paga con: $${parseFloat(orderDetails.customer.amount).toFixed(2)})`;
-            }
-            if (orderDetails.cambio > 0) {
-                 message += `\n*Cambio*: $${orderDetails.cambio.toFixed(2)}\n`;
-            }
-            message += `\n`;
-
-
-            // Agregar los detalles del pedido
-            message += `*Productos*:\n`;
-            orderDetails.items.forEach(item => {
-                message += `- ${item.quantity}x ${item.name}`;
-                if (item.flavors && item.flavors.length > 0) {
-                    message += ` (Sabores: ${item.flavors.join(', ')})`;
-                }
-                message += ` ($${item.price.toFixed(2)} c/u)\n`;
-            });
-
-            // Agregar el total
-            message += `\n*Subtotal*: $${orderDetails.subtotal.toFixed(2)}\n`;
-            message += `*Costo de envío*: ${orderDetails.shippingCost > 0 ? '$' + orderDetails.shippingCost.toFixed(2) : '¡GRATIS!'}\n`;
-            message += `*Total*: $${orderDetails.total.toFixed(2)}\n`;
-
-            // Codificar el mensaje para la URL de WhatsApp
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-            // Abrir el enlace en una nueva ventana
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Manejar el envío del formulario de pedido
-        orderForm.addEventListener('submit', async (e) => {
+        orderModalElements.amountInput.addEventListener('input', updateCambio);
+        
+        orderModalElements.form.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Obtener los datos del formulario de forma segura
-            const customerData = {
-                name: document.getElementById('name')?.value || '',
-                address: document.getElementById('address')?.value || '',
-                phone: document.getElementById('phone')?.value || '',
-                details: document.getElementById('details')?.value || '',
-                payment: document.getElementById('payment')?.value || '',
-                amount: document.getElementById('amount')?.value || '',
-            };
-
+            const formData = new FormData(orderModalElements.form);
+            const customerData = Object.fromEntries(formData.entries());
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            let shippingCost = 0;
-            if (subtotal > 0 && subtotal <= shippingThreshold) {
-                shippingCost = shippingCostValue;
-            }
+            const shippingCost = (subtotal > 0 && subtotal <= shippingThreshold) ? shippingCostValue : 0;
             const total = subtotal + shippingCost;
             const amount = parseFloat(customerData.amount);
-            const cambio = (customerData.payment === 'Con Cambio' || customerData.payment === 'Efectivo') && !isNaN(amount) && amount >= total ? amount - total : 0;
+            const cambio = (['Con Cambio', 'Efectivo'].includes(customerData.payment) && !isNaN(amount) && amount >= total) ? amount - total : 0;
             
-            const orderDetails = {
-                customer: customerData,
-                items: cart,
-                subtotal: subtotal,
-                shippingCost: shippingCost,
-                total: total,
-                cambio: cambio,
-            };
-
-            // Enviar el pedido a WhatsApp
-            sendOrderToWhatsApp(orderDetails);
-
-            // Ocultar el modal del formulario y mostrar el de confirmación
-            orderModal.classList.add('hidden');
+            sendOrderToWhatsApp({ customer: customerData, items: cart, subtotal, shippingCost, total, cambio });
+            orderModalElements.modal.classList.add('hidden');
             confirmationModal.classList.remove('hidden');
         });
 
-        // Iniciar la aplicación
+        document.getElementById('close-confirmation-button').addEventListener('click', () => {
+            confirmationModal.classList.add('hidden');
+            cart = [];
+            orderModalElements.form.reset();
+            orderModalElements.paymentSelect.dispatchEvent(new Event('change'));
+            renderCart();
+        });
+
+        // Listeners para cerrar modales y carrito móvil
+        cartElements.clearBtn.addEventListener('click', () => { cart = []; renderCart(); });
+        mobileCartElements.openBtn.addEventListener('click', () => mobileCartElements.view.classList.add('active'));
+        mobileCartElements.closeBtn.addEventListener('click', () => mobileCartElements.view.classList.remove('active'));
+        flavorModalElements.closeBtn.addEventListener('click', () => flavorModalElements.modal.classList.add('hidden'));
+        qtyFlavorModalElements.closeBtn.addEventListener('click', () => qtyFlavorModalElements.modal.classList.add('hidden'));
+        orderModalElements.closeBtn.addEventListener('click', () => orderModalElements.modal.classList.add('hidden'));
+        
+        // Inicialización
+        renderCategoryFilters();
         renderProducts();
         renderCart();
-
+    });
     </script>
 </body>
 </html>
-```
+
