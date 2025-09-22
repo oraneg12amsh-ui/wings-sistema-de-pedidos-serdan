@@ -32,25 +32,6 @@
         .cart-mobile-view.active {
             transform: translateY(0);
         }
-        /* Estilos para resaltar el carrito */
-        .highlight-cart {
-            animation: pulse-border 2s 2;
-            border: 2px solid #2563eb; /* Color azul para que coincida con los botones */
-        }
-        .highlight-cart-mobile {
-            animation: pulse-bg 2s 2;
-        }
-
-        @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-        }
-        @keyframes pulse-bg {
-            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans p-4 md:p-8">
@@ -60,33 +41,6 @@
         <h1 class="text-4xl font-bold text-gray-800">Nuestro Menú</h1>
         <p class="text-gray-600 mt-2">Selecciona tus productos y completa tu pedido</p>
     </header>
-
-    <!-- Sección de Instrucciones -->
-    <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6 mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">¿Cómo ordenar?</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-            <div class="flex flex-col items-center p-4">
-                <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center text-xl font-bold mb-3">1</div>
-                <h3 class="font-semibold text-gray-700">Selecciona Productos</h3>
-                <p class="text-sm text-gray-600 mt-1">Explora el menú y añade lo que te guste al carrito.</p>
-            </div>
-            <div class="flex flex-col items-center p-4">
-                <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center text-xl font-bold mb-3">2</div>
-                <h3 class="font-semibold text-gray-700">Revisa tu Carrito</h3>
-                <p class="text-sm text-gray-600 mt-1">Verifica los productos que has seleccionado.</p>
-            </div>
-            <div class="flex flex-col items-center p-4">
-                <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center text-xl font-bold mb-3">3</div>
-                <h3 class="font-semibold text-gray-700">Completa tus Datos</h3>
-                <p class="text-sm text-gray-600 mt-1">Ingresa tu nombre y dirección para la entrega.</p>
-            </div>
-            <div class="flex flex-col items-center p-4">
-                <div class="bg-orange-500 text-white rounded-full h-12 w-12 flex items-center justify-center text-xl font-bold mb-3">4</div>
-                <h3 class="font-semibold text-gray-700">Confirma en WhatsApp</h3>
-                <p class="text-sm text-gray-600 mt-1">Se abrirá un chat con tu pedido listo. Solo presiona enviar.</p>
-            </div>
-        </div>
-    </div>
 
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         
@@ -99,7 +53,7 @@
         </div>
 
         <!-- Sección del Carrito de Compras -->
-        <div id="cart-section" class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8 lg:block hidden transition-all duration-300">
+        <div id="cart-section" class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8 lg:block hidden">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex justify-between items-center">
                 Tu Carrito
                 <button id="clear-cart-button" class="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 hidden">Vaciar Carrito</button>
@@ -314,6 +268,9 @@
             { id: 15, name: 'Martes x Pieza', price: 7.50, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
             { id: 16, name: 'Boneless x Pieza', price: 10.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673c2.227 0 3.75-1.921 3.256-4.103l-1.18-5.328a2.535 2.535 0 00-2.478-1.996h-2.102c-.93 0-1.821.5-2.298 1.353l-2.732 4.966c-.504 1.134.427 2.478 1.621 2.478z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: true },
             { id: 17, name: 'Orden Boneless (10 pzs)', price: 95.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10m-8-4h16" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
+            { id: 18, name: 'Combo Mixto Clásico (6 boneless 6 alitas)', price: 115.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13C10.832 5.438 9.255 5 7.5 5S4.168 5.438 3 6.253v13C4.168 18.438 5.745 18 7.5 18s3.332.438 4.5 1.253m0-13C13.168 5.438 14.745 5 16.5 5c1.755 0 3.332.438 4.5 1.253v13C19.832 18.438 18.255 18 16.5 18c-1.755 0-3.332.438-4.5 1.253" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
+            { id: 19, name: 'Combo Diez de Diez (10 boneless 10 alitas)', price: 195.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-1a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4zM7 20H6a4 4 0 01-4-4V7a4 4 0 014-4h1a4 4 0 014 4v9a4 4 0 01-4 4z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
+            { id: 20, name: 'Combo Dinámico (5 boneless 5 alitas)', price: 100.00, icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>`, requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
         ];
 
         // Estado del carrito de compras
@@ -485,38 +442,19 @@
             }
         }
 
-        // Función para resaltar los elementos del carrito
-        function highlightCartElements() {
-            const cartSection = document.getElementById('cart-section');
-            const mobileCartBtn = document.getElementById('mobile-cart-button');
-
-            cartSection.classList.add('highlight-cart');
-            mobileCartBtn.classList.add('highlight-cart-mobile');
-
-            // Quitar el resaltado después de 4 segundos
-            setTimeout(() => {
-                cartSection.classList.remove('highlight-cart');
-                mobileCartBtn.classList.remove('highlight-cart-mobile');
-            }, 4000);
-        }
-
         // Función para añadir un producto al carrito
         function addToCart(product, quantity = 1, flavors = []) {
-            const wasCartEmpty = cart.length === 0;
-
+            // Encuentra un ítem idéntico en el carrito (mismo id y sabores)
             const existingItem = cart.find(item => item.id === product.id && JSON.stringify(item.flavors) === JSON.stringify(flavors));
             
             if (existingItem) {
+                // Si existe, aumenta su cantidad
                 existingItem.quantity += quantity;
             } else {
+                // Si no existe, agrégalo
                 cart.push({ ...product, quantity: quantity, flavors: flavors });
             }
             renderCart();
-
-            // Si el carrito estaba vacío, resáltalo
-            if (wasCartEmpty && cart.length > 0) {
-                highlightCartElements();
-            }
         }
 
         // Función para eliminar un producto del carrito
@@ -914,4 +852,4 @@
     </script>
 </body>
 </html>
-
+```
