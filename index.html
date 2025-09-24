@@ -234,13 +234,12 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const flavors = ['Habanero', 'Valentina', 'Limón con Tajín', 'BBQ', 'Búfalo', 'Naturales', 'Ranch'];
-        const bonelessFlavors = ['Habanero', 'BBQ', 'Búfalo', 'Ranch'];
-        const comboFlavors = ['Habanero', 'BBQ', 'Búfalo', 'Ranch'];
+        const specialFlavors = ['Habanero', 'BBQ', 'Búfalo', 'Ranch'];
         const shippingThreshold = 100;
         const shippingCostValue = 15.00;
         
-        // --- INICIO DE MODIFICACIÓN: Nuevos combos añadidos ---
-        const products = [
+        // --- INICIO DE MODIFICACIÓN: Productos de promoción ahora son estándar ---
+        const allProducts = [
             { id: 1, name: 'Paquete Personal (8 pzs)', price: 85.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
             { id: 2, name: 'Paquete Dúo (14 pzs)', price: 135.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
             { id: 3, name: 'Paquete Amigos (25 pzs)', price: 235.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
@@ -248,19 +247,20 @@
             { id: 5, name: 'Paquete Llenador (50 pzs)', price: 450.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: false },
             { id: 9, name: 'Orden Kids (4 pzs)', price: 35.00, category: 'Paquetes', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 1, flavors: flavors, isCustomQuantity: false },
             
-            { id: 18, name: 'Combo Mixto Clásico (6 boneless 6 alitas)', price: 115.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: comboFlavors, isCustomQuantity: false },
-            { id: 19, name: 'Combo Diez de Diez (10 boneless 10 alitas)', price: 195.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: comboFlavors, isCustomQuantity: false },
-            { id: 20, name: 'Combo Dinámico (5 boneless 5 alitas)', price: 100.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: comboFlavors, isCustomQuantity: false },
+            { id: 18, name: 'Combo Mixto Clásico (6 boneless 6 alitas)', price: 115.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: specialFlavors, isCustomQuantity: false },
+            { id: 19, name: 'Combo Diez de Diez (10 boneless 10 alitas)', price: 195.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: specialFlavors, isCustomQuantity: false },
+            { id: 20, name: 'Combo Dinámico (5 boneless 5 alitas)', price: 100.00, category: 'Combos', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Combo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: specialFlavors, isCustomQuantity: false },
 
             { id: 6, name: '1 kg (18 pzs)', price: 190.00, category: 'Alitas', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 7, flavors: flavors, isCustomQuantity: false },
             { id: 7, name: '1/2 kg (10 pzs)', price: 95.00, category: 'Alitas', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 7, flavors: flavors, isCustomQuantity: false },
             { id: 8, name: 'Orden (6 pzs)', price: 65.00, category: 'Alitas', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 1, flavors: flavors, isCustomQuantity: false },
             
-            { id: 17, name: 'Orden Boneless (10 pzs)', price: 95.00, category: 'Boneless', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: false },
-            { id: 16, name: 'Boneless x Pieza', price: 10.00, category: 'Boneless', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: bonelessFlavors, isCustomQuantity: true },
+            { id: 17, name: 'Orden Boneless (10 pzs)', price: 95.00, category: 'Boneless', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: specialFlavors, isCustomQuantity: false },
+            { id: 16, name: 'Boneless x Pieza', price: 10.00, category: 'Boneless', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: specialFlavors, isCustomQuantity: true },
 
             { id: 14, name: 'Lunes x Pieza', price: 6.50, category: 'Promociones', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
             { id: 15, name: 'Martes x Pieza', price: 7.50, category: 'Promociones', imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?q=80&w=400', placeholderText: 'Alitas!', requiresFlavorSelection: true, maxFlavors: 2, flavors: flavors, isCustomQuantity: true },
+            { id: 21, name: 'Miércoles y Jueves x Pieza', price: 7.50, category: 'Promociones', imageUrl: 'https://images.unsplash.com/photo-1628481353981-80deba45e1a1?q=80&w=400', placeholderText: 'Promo!', requiresFlavorSelection: true, maxFlavors: 2, flavors: specialFlavors, isCustomQuantity: true },
 
             { id: 10, name: 'Orden de Papas Fritas', price: 45.00, category: 'Extras', imageUrl: 'https://images.unsplash.com/photo-1576107232684-1279f390859f?q=80&w=400', placeholderText: 'Papas!', requiresFlavorSelection: false, isCustomQuantity: false },
             { id: 11, name: 'Aderezo Ranch', price: 20.00, category: 'Extras', imageUrl: '', placeholderText: 'Aderezo', requiresFlavorSelection: false, isCustomQuantity: false },
@@ -268,8 +268,8 @@
             { id: 12, name: 'Coca-Cola 600 ml', price: 30.00, category: 'Bebidas', imageUrl: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?q=80&w=400', placeholderText: 'Coca-Cola', requiresFlavorSelection: false, isCustomQuantity: false },
             { id: 13, name: 'Mundet 600 ml', price: 30.00, category: 'Bebidas', imageUrl: 'https://images.unsplash.com/photo-1610873167013-28495d6f2a68?q=80&w=400', placeholderText: 'Mundet', requiresFlavorSelection: false, isCustomQuantity: false },
         ];
-        // --- FIN DE MODIFICACIÓN ---
-
+        
+        let productsToRender = [...allProducts];
         let cart = [];
         let currentProduct = null;
         let selectedFlavors = [];
@@ -328,13 +328,25 @@
         };
         const confirmationModal = document.getElementById('confirmation-modal');
 
+        // --- INICIO DE MODIFICACIÓN: Lógica para filtrar por URL ---
+        let initialCategory = 'Todos';
+        
         const renderCategoryFilters = () => {
             const filtersContainer = document.getElementById('category-filters');
-            const categories = ['Todos', ...new Set(products.map(p => p.category))];
-            filtersContainer.innerHTML = categories.map((category, index) => 
-                `<button class="category-filter-btn ${index === 0 ? 'active' : ''}" data-category="${category}">${category}</button>`
+            const categories = ['Todos', ...new Set(productsToRender.map(p => p.category))];
+            
+            // Revisa si hay una categoría en la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryFromUrl = urlParams.get('category');
+            if (categoryFromUrl && categories.includes(categoryFromUrl)) {
+                initialCategory = categoryFromUrl;
+            }
+
+            filtersContainer.innerHTML = categories.map((category) => 
+                `<button class="category-filter-btn ${category === initialCategory ? 'active' : ''}" data-category="${category}">${category}</button>`
             ).join('');
         };
+        // --- FIN DE MODIFICACIÓN ---
 
         const handleCategoryFilter = (e) => {
             if (e.target.matches('.category-filter-btn')) {
@@ -347,7 +359,9 @@
         
         const renderProducts = (filterCategory = 'Todos') => {
             productList.innerHTML = '';
-            const filteredProducts = filterCategory === 'Todos' ? products : products.filter(p => p.category === filterCategory);
+            let filteredProducts = filterCategory === 'Todos' 
+                ? productsToRender 
+                : productsToRender.filter(p => p.category === filterCategory);
             
             if (filteredProducts.length === 0) {
                 productList.innerHTML = `<p class="text-gray-500 col-span-full text-center">No hay productos en esta categoría.</p>`;
@@ -540,7 +554,7 @@
         document.addEventListener('click', (e) => {
             const addBtn = e.target.closest('.add-to-cart-btn');
             if (addBtn) {
-                const product = products.find(p => p.id === parseInt(addBtn.dataset.id));
+                const product = productsToRender.find(p => p.id === parseInt(addBtn.dataset.id));
                 mobileCartElements.view.classList.remove('active');
                 if (product.isCustomQuantity) openFlavorModal(qtyFlavorModalElements, product, true);
                 else if (product.requiresFlavorSelection) openFlavorModal(flavorModalElements, product);
@@ -618,7 +632,7 @@
         
         // Inicialización
         renderCategoryFilters();
-        renderProducts();
+        renderProducts(initialCategory); // Usa la categoría inicial al renderizar
         renderCart();
     });
     </script>
