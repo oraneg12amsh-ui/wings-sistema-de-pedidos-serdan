@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -329,12 +331,43 @@
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Initialize Firebase
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = {
+            apiKey: "AIzaSyC5FgnZkkzjP3MwWuM9QUBeuhHTnqYPZ3M",
+            authDomain: "sistema-de-pedidos-95bce.firebaseapp.com",
+            projectId: "sistema-de-pedidos-95bce",
+            storageBucket: "sistema-de-pedidos-95bce.firebasestorage.app",
+            messagingSenderId: "559612407232",
+            appId: "1:559612407232:web:43e0841bca9ef9d472ec25",
+            measurementId: "G-DXV79WQJNM" 
+        };
+        
+        // Inicialización Híbrida (Nube o Local)
+        let app, auth, db;
+        let firebaseReady = false;
+        const appId = 'wings-house-v1'; // Identificador para la BD
+
+        try {
+            if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "") {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                firebaseReady = true;
+                console.log("Modo Online: Firebase activado");
+            } else {
+                // Intento de fallback para entorno de prueba si existe la variable global (solo para desarrollo)
+                if (typeof __firebase_config !== 'undefined') {
+                    const previewConfig = JSON.parse(__firebase_config);
+                    app = initializeApp(previewConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    firebaseReady = true;
+                } else {
+                    console.warn("Modo Local: Faltan credenciales de Firebase. Los cambios de Admin no se sincronizarán.");
+                }
+            }
+        } catch (e) {
+            console.error("Error inicializando Firebase:", e);
+        }
 
         let hiddenProducts = [];
         let storeSettings = { useAutoSchedule: true, isManualOpen: true }; // Default settings
@@ -438,15 +471,39 @@
         
         // 1. Auth Init
         const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
+            if (!firebaseReady) return; // Skip if no firebase
+            
+            try {
+                // Si estamos usando la configuración manual del usuario, NO usar el token del entorno de prueba
+                // El token __initial_auth_token solo sirve para el proyecto interno de Canvas, no para el del usuario.
+                const isManualConfig = firebaseConfig.apiKey && firebaseConfig.apiKey !== "";
+
+                if (!isManualConfig && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (e) {
+                console.error("Auth error (retrying anon):", e);
+                // Fallback de seguridad
+                try { await signInAnonymously(auth); } catch(ee) { console.error("Anon auth failed", ee)}
             }
         };
 
         // 2. Real-time Availability Sync
         const subscribeToSettings = () => {
+            if (!firebaseReady) {
+                // Fallback to LocalStorage if Firebase is missing
+                try {
+                    const savedHidden = JSON.parse(localStorage.getItem('wingsHouseHiddenProducts'));
+                    if (savedHidden) hiddenProducts = savedHidden;
+                    const savedSettings = JSON.parse(localStorage.getItem('wingsHouseSettings'));
+                    if (savedSettings) storeSettings = savedSettings;
+                    refreshViews();
+                } catch(e) {}
+                return;
+            }
+
             const settingsDoc = doc(db, 'artifacts', appId, 'public', 'data', 'store_settings', 'availability');
             
             onSnapshot(settingsDoc, (docSnap) => {
@@ -460,29 +517,32 @@
                     // Default store settings already set in let storeSettings
                 }
                 
-                // Update Admin UI controls based on fetched settings
-                if (dom.admin.toggleSchedule) dom.admin.toggleSchedule.checked = storeSettings.useAutoSchedule;
-                if (dom.admin.toggleManualOpen) dom.admin.toggleManualOpen.checked = storeSettings.isManualOpen;
-                updateAdminManualControlsUI();
-
-                // Refresh views with new hidden status & schedule
-                const { isOpen } = checkStoreHours();
-                toggleOrdering(isOpen);
-                
-                productsToRender = getAvailableProducts();
-                renderCategoryFilters(); 
-                filterAndRenderProducts();
-                renderExtrasModal();
-                // If admin panel is open, refresh it too
-                if (!dom.admin.panelModal.classList.contains('hidden')) {
-                    renderAdminProductList();
-                }
+                refreshViews();
             }, (error) => {
                 console.error("Error syncing settings:", error);
             });
         };
 
+        const refreshViews = () => {
+             // Update Admin UI controls
+             if (dom.admin.toggleSchedule) dom.admin.toggleSchedule.checked = storeSettings.useAutoSchedule;
+             if (dom.admin.toggleManualOpen) dom.admin.toggleManualOpen.checked = storeSettings.isManualOpen;
+             updateAdminManualControlsUI();
+
+             // Refresh app views
+             const { isOpen } = checkStoreHours();
+             toggleOrdering(isOpen);
+             productsToRender = getAvailableProducts();
+             renderCategoryFilters(); 
+             filterAndRenderProducts();
+             renderExtrasModal();
+             if (!dom.admin.panelModal.classList.contains('hidden')) {
+                 renderAdminProductList();
+             }
+        };
+
         const updateAdminManualControlsUI = () => {
+            if (!dom.admin.manualStatusContainer) return;
             if (storeSettings.useAutoSchedule) {
                 dom.admin.manualStatusContainer.classList.add('opacity-50', 'pointer-events-none');
             } else {
@@ -491,6 +551,13 @@
         };
 
         const saveStoreSettings = async () => {
+            if (!firebaseReady) {
+                // Save locally
+                localStorage.setItem('wingsHouseHiddenProducts', JSON.stringify(hiddenProducts));
+                localStorage.setItem('wingsHouseSettings', JSON.stringify(storeSettings));
+                refreshViews();
+                return;
+            }
             try {
                 const settingsDoc = doc(db, 'artifacts', appId, 'public', 'data', 'store_settings', 'availability');
                 await setDoc(settingsDoc, { 
@@ -500,7 +567,7 @@
                 }, { merge: true });
             } catch (e) {
                 console.error("Error saving settings:", e);
-                alert("Error al guardar cambios. Verifica tu conexión.");
+                alert("Error al guardar en la nube. Revisa tu conexión o configuración.");
             }
         };
 
@@ -510,7 +577,10 @@
             } else { 
                 hiddenProducts.push(id); 
             }
-            renderAdminProductList();
+            // Optimistic update for UI responsiveness
+            if (dom.admin.panelModal.classList.contains('hidden') === false) {
+                 renderAdminProductList();
+            }
             await saveStoreSettings();
         };
 
@@ -548,7 +618,7 @@
                 if (storeSettings.isManualOpen) {
                     return { isOpen: true, message: '' };
                 } else {
-                    return { isOpen: false, message: 'La tienda está cerrada temporalmente.' };
+                    return { isOpen: false, message: 'La tienda está cerrada temporalmente por el administrador.' };
                 }
             }
 
