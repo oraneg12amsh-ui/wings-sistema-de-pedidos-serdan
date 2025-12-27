@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Meta etiquetas para evitar el caché y asegurar que se vea la actualización de GitHub inmediatamente -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
     <title>Wing's House - Menú Digital y Pedidos</title>
     <meta name="description" content="Explora nuestro menú de alitas, boneless, paquetes y más. Haz tu pedido fácilmente y te lo enviamos por WhatsApp.">
     
@@ -73,7 +65,7 @@
         .category-filter-btn:hover { background-color: #cbd5e1; }
         .category-filter-btn.active { background-color: #d97706; color: white; }
         .extras-modal-grid { max-height: 40vh; overflow-y: auto; }
-        .add-extra-btn:disabled { background-color: #94a3b8; color: white; opacity: 1; cursor: not-allowed; }
+        .add-extra-btn:disabled { background-color: #22c55e; color: white; opacity: 1; }
         .coupon-applied-tag { background-color: #dcfce7; color: #166534; border-color: #86efac; }
         .coupon-error-msg { color: #dc2626; }
         @keyframes fadeInScale {
@@ -87,18 +79,11 @@
             align-items: center; justify-content: center; transition: background-color 0.2s;
         }
         .quantity-btn:hover { background-color: #cbd5e1; }
+        /* (NUEVO) Estilo para botones de añadir deshabilitados por horario */
         .add-to-cart-btn:disabled {
-            background-color: #94a3b8; 
+            background-color: #94a3b8; /* slate-400 */
             cursor: not-allowed;
             opacity: 0.7;
-        }
-        /* Estilos Toggle Switch para Admin */
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #68D391;
-        }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: #68D391;
         }
     </style>
 </head>
@@ -351,40 +336,6 @@
         </div>
     </div>
 
-    <button id="admin-login-btn" class="fixed bottom-4 left-4 bg-gray-800 text-white p-3 rounded-full shadow-lg opacity-50 hover:opacity-100 transition-opacity z-50">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-        </svg>
-    </button>
-
-    <div id="admin-login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 modal-content">
-            <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Acceso Administrador</h3>
-            <input type="password" id="admin-password" placeholder="Contraseña" class="w-full border border-slate-300 rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-primary-500">
-            <div class="flex justify-between gap-2">
-                <button id="admin-cancel-login" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">Cancelar</button>
-                <button id="admin-submit-login" class="flex-1 bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700">Entrar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="admin-panel-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 modal-content flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center mb-6 border-b pb-4">
-                <h3 class="text-2xl font-bold text-slate-800">Administrar Disponibilidad</h3>
-                <button id="admin-close-panel" class="text-slate-500 hover:text-slate-700 font-bold text-xl">&times;</button>
-            </div>
-            <div class="mb-4">
-                <p class="text-sm text-gray-500">Activa o desactiva los productos. Los productos desactivados no serán visibles para los clientes.</p>
-            </div>
-            <div id="admin-product-list" class="overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 pr-2">
-                </div>
-            <div class="mt-6 text-right border-t pt-4">
-                <button id="admin-finish-btn" class="bg-primary-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-primary-700">Listo / Guardar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
     // --- (NUEVO) Configuración de Horarios ---
     const ENABLE_SCHEDULE_CHECK = true; // Poner en 'false' para desactivar la verificación de horario
@@ -474,9 +425,9 @@
         const dom = {
             productList: document.getElementById('product-list'),
             categoryFilters: document.getElementById('category-filters'),
-            searchBar: document.getElementById('search-bar'), 
-            storeClosedBanner: document.getElementById('store-closed-banner'), 
-            storeClosedMessage: document.getElementById('store-closed-message'), 
+            searchBar: document.getElementById('search-bar'), // (NUEVO)
+            storeClosedBanner: document.getElementById('store-closed-banner'), // (NUEVO)
+            storeClosedMessage: document.getElementById('store-closed-message'), // (NUEVO)
             cart: {
                 list: document.getElementById('cart-list'),
                 subtotal: document.getElementById('cart-subtotal'),
@@ -548,73 +499,18 @@
             confirmationModal: {
                 modal: document.getElementById('confirmation-modal'),
                 closeBtn: document.getElementById('close-confirmation-button')
-            },
-            // (NUEVO) Elementos DOM de Admin
-            admin: {
-                loginBtn: document.getElementById('admin-login-btn'),
-                loginModal: document.getElementById('admin-login-modal'),
-                passwordInput: document.getElementById('admin-password'),
-                submitLogin: document.getElementById('admin-submit-login'),
-                cancelLogin: document.getElementById('admin-cancel-login'),
-                panelModal: document.getElementById('admin-panel-modal'),
-                closePanel: document.getElementById('admin-close-panel'),
-                finishBtn: document.getElementById('admin-finish-btn'),
-                productList: document.getElementById('admin-product-list')
             }
         };
         
         let productsToRender = [];
-        let isStoreCurrentlyOpen = false;
-
-        // --- (NUEVO) Lógica de Admin ---
-        const ADMIN_PASSWORD = "admin123"; // Contraseña por defecto
-
-        const getHiddenProducts = () => {
-            try {
-                return JSON.parse(localStorage.getItem('wingsHouseHiddenProducts')) || [];
-            } catch (e) { return []; }
-        };
-
-        const toggleProductVisibility = (id) => {
-            let hidden = getHiddenProducts();
-            if (hidden.includes(id)) {
-                hidden = hidden.filter(h => h !== id);
-            } else {
-                hidden.push(id);
-            }
-            localStorage.setItem('wingsHouseHiddenProducts', JSON.stringify(hidden));
-            // Actualizar vista principal
-            productsToRender = getAvailableProducts();
-            renderCategoryFilters(); // Actualizar filtros si una categoría se vacía
-            filterAndRenderProducts();
-        };
-
-        const renderAdminProductList = () => {
-            const hidden = getHiddenProducts();
-            dom.admin.productList.innerHTML = ALL_PRODUCTS.map(product => {
-                const isHidden = hidden.includes(product.id);
-                return `
-                    <div class="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
-                        <div class="text-sm">
-                            <p class="font-bold text-slate-800">${product.name}</p>
-                            <p class="text-xs text-slate-500">${product.category}</p>
-                        </div>
-                        <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" name="toggle" id="toggle-${product.id}" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300" ${!isHidden ? 'checked' : ''} onchange="window.handleAdminToggle(${product.id})"/>
-                            <label for="toggle-${product.id}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        };
-
-        // Exponer función al window para el onchange del HTML generado
-        window.handleAdminToggle = (id) => {
-            toggleProductVisibility(id);
-        };
+        let isStoreCurrentlyOpen = false; // (NUEVO)
 
         // --- (NUEVO) Funciones de Horario ---
 
+        /**
+         * Verifica si la tienda está abierta.
+         * @returns { {isOpen: boolean, message: string} }
+         */
         const checkStoreHours = () => {
             if (!ENABLE_SCHEDULE_CHECK) {
                 return { isOpen: true, message: '' };
@@ -628,48 +524,57 @@
 
                 const schedule = STORE_SCHEDULE.find(s => s.day === today);
 
+                // (NUEVO) Verificar si hay slots
                 if (!schedule || !schedule.slots || schedule.slots.length === 0) {
                     return { isOpen: false, message: 'Hoy estamos cerrados. ¡Te esperamos mañana!' };
                 }
 
                 const formatTime = (time) => new Date(0,0,0, time.h, time.m).toLocaleTimeString('es-MX', { hour: 'numeric', minute: 'numeric', hour12: true });
+
+                // (NUEVO) Generar el mensaje de horario
                 const scheduleString = schedule.slots.map(slot => 
                     `de ${formatTime(slot.open)} a ${formatTime(slot.close)}`
                 ).join(' y ');
                 const defaultMessage = `Nuestro horario de hoy es ${scheduleString}.`;
 
+                // (NUEVO) Iterar sobre los slots para ver si alguno coincide
                 for (const slot of schedule.slots) {
                     const { open, close } = slot;
                     const openTimeInMinutes = open.h * 60 + open.m;
                     let closeTimeInMinutes = close.h * 60 + close.m;
 
+                    // Manejar horario que cruza la medianoche (ej. cierra a las 00:00)
                     if (closeTimeInMinutes < openTimeInMinutes) {
                          if (close.h === 0 && close.m === 0) {
-                            closeTimeInMinutes = 24 * 60; 
+                            closeTimeInMinutes = 24 * 60; // Tratar 00:00 como el final del día (minuto 1440)
                          }
                     }
 
                     if (currentTimeInMinutes >= openTimeInMinutes && currentTimeInMinutes < closeTimeInMinutes) {
-                        return { isOpen: true, message: '' }; 
+                        return { isOpen: true, message: '' }; // Abierto
                     }
                 }
                 
+                // Si el loop termina, está cerrado
                 return {
                     isOpen: false,
                     message: `Estamos cerrados. ${defaultMessage}`
                 };
             } catch (e) {
                 console.error("Error al verificar horario:", e);
-                return { isOpen: true, message: '' }; 
+                return { isOpen: true, message: '' }; // Falla en modo abierto para no bloquear ventas
             }
         };
 
+        /** (NUEVO) Deshabilita los botones de la app si la tienda está cerrada */
         const toggleOrdering = (enable) => {
             isStoreCurrentlyOpen = enable;
             
+            // Botones de finalizar pedido
             dom.cart.checkoutBtn.disabled = !enable || state.cart.length === 0;
             dom.mobileCart.checkoutBtn.disabled = !enable || state.cart.length === 0;
 
+            // Botones de "Añadir" en la lista de productos
             dom.productList.querySelectorAll('.add-to-cart-btn').forEach(btn => {
                 btn.disabled = !enable;
                 if (!enable) {
@@ -679,6 +584,7 @@
                 }
             });
 
+            // Banner
             if (enable) {
                 dom.storeClosedBanner.classList.add('hidden');
             } else {
@@ -715,14 +621,7 @@
         const getAvailableProducts = () => {
             const now = new Date();
             const today = now.getDay(); 
-            const hiddenProducts = getHiddenProducts(); // (NUEVO) Obtener ocultos
-
             return ALL_PRODUCTS.filter(product => {
-                // (NUEVO) Verificar si está oculto por admin
-                if (hiddenProducts.includes(product.id)) {
-                    return false;
-                }
-
                 switch(product.id) {
                     case 14: return today === 1;
                     case 15: return today === 2;
@@ -749,6 +648,7 @@
             return initialCategory;
         };
 
+        /** (MODIFICADO) Renderiza productos basado en filtros Y búsqueda */
         const filterAndRenderProducts = () => {
             const activeCategoryBtn = dom.categoryFilters.querySelector('.category-filter-btn.active');
             const category = activeCategoryBtn ? activeCategoryBtn.dataset.category : 'Todos';
@@ -756,16 +656,19 @@
 
             let filteredProducts = productsToRender;
 
+            // 1. Filtrar por categoría
             if (category !== 'Todos') {
                 filteredProducts = filteredProducts.filter(p => p.category === category);
             }
 
+            // 2. Filtrar por término de búsqueda
             if (searchTerm) {
                 filteredProducts = filteredProducts.filter(p => 
                     p.name.toLowerCase().includes(searchTerm)
                 );
             }
 
+            // --- Renderizar ---
             dom.productList.innerHTML = '';
             if (filteredProducts.length === 0) {
                 dom.productList.innerHTML = `<p class="text-slate-500 col-span-full text-center">No se encontraron productos.</p>`;
@@ -794,11 +697,8 @@
         };
 
         const renderExtrasModal = () => {
-            // (MODIFICADO) Filtrar extras y bebidas también por ocultos
-            const hidden = getHiddenProducts();
-            const extras = ALL_PRODUCTS.filter(p => p.category === 'Extras' && !hidden.includes(p.id));
-            const bebidas = ALL_PRODUCTS.filter(p => p.category === 'Bebidas' && !hidden.includes(p.id));
-            
+            const extras = ALL_PRODUCTS.filter(p => p.category === 'Extras');
+            const bebidas = ALL_PRODUCTS.filter(p => p.category === 'Bebidas');
             const createItemHTML = (product) => `
                 <div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg">
                     <div>
@@ -853,6 +753,7 @@
             renderList(dom.mobileCart.list, dom.mobileCart.emptyMsg);
             updateCartTotals(); 
             const isCartEmpty = state.cart.length === 0;
+            // (MODIFICADO) Deshabilitar checkout si la tienda está cerrada
             dom.cart.checkoutBtn.disabled = isCartEmpty || !isStoreCurrentlyOpen;
             dom.mobileCart.checkoutBtn.disabled = isCartEmpty || !isStoreCurrentlyOpen;
             dom.cart.clearBtn.classList.toggle('hidden', isCartEmpty);
@@ -870,6 +771,7 @@
             } else {
                 dom.cart.couponMsg.innerHTML = '';
                 dom.mobileCart.couponMsg.innerHTML = '';
+                // (MODIFICADO) Deshabilitar select si la tienda está cerrada
                 dom.cart.couponSelect.disabled = !isStoreCurrentlyOpen;
                 dom.mobileCart.couponSelect.disabled = !isStoreCurrentlyOpen;
                 dom.cart.couponSelect.value = '';
@@ -897,6 +799,7 @@
                 }
             };
 
+            // --- Actualizar Desktop ---
             dom.cart.subtotal.textContent = formatCurrency(subtotal);
             dom.cart.shipping.textContent = shippingCost > 0 ? formatCurrency(shippingCost) : '¡GRATIS!';
             dom.cart.shipping.className = `font-semibold ${shippingCost > 0 ? 'text-red-500' : (subtotal > 0 ? 'text-green-500' : 'text-slate-600')}`;
@@ -909,6 +812,7 @@
             }
             dom.cart.total.textContent = formatCurrency(total);
 
+            // --- Actualizar Móvil ---
             dom.mobileCart.subtotal.textContent = formatCurrency(subtotal);
             dom.mobileCart.shipping.textContent = shippingCost > 0 ? formatCurrency(shippingCost) : '¡GRATIS!';
             dom.mobileCart.shipping.className = `font-semibold ${shippingCost > 0 ? 'text-red-500' : (subtotal > 0 ? 'text-green-500' : 'text-slate-600')}`;
@@ -962,7 +866,7 @@
                 dom.extrasModal.modal.querySelectorAll('.add-extra-btn').forEach(btn => {
                     btn.disabled = false;
                     btn.textContent = 'Añadir';
-                    if (!isStoreCurrentlyOpen) { 
+                    if (!isStoreCurrentlyOpen) { // (NUEVO) Respetar horario en modal
                         btn.disabled = true;
                         btn.textContent = 'Cerrado';
                     }
@@ -1070,8 +974,6 @@
             dom.orderModal.modal.classList.add('hidden');
             dom.confirmationModal.modal.classList.add('hidden');
             dom.extrasModal.modal.classList.add('hidden'); 
-            dom.admin.loginModal.classList.add('hidden'); // Admin
-            dom.admin.panelModal.classList.add('hidden'); // Admin
         };
 
         const showOrderModal = () => {
@@ -1136,22 +1038,12 @@
             saveState();
         };
 
+        /** (MODIFICADO) Llama a filterAndRenderProducts */
         const handleCategoryFilterClick = (e) => {
             if (e.target.matches('.category-filter-btn')) {
                 document.querySelectorAll('.category-filter-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
-                
-                // Actualizar la URL para persistir la categoría
-                const category = e.target.dataset.category;
-                const url = new URL(window.location);
-                if (category === 'Todos') {
-                    url.searchParams.delete('category');
-                } else {
-                    url.searchParams.set('category', category);
-                }
-                window.history.replaceState(null, '', url);
-
-                filterAndRenderProducts(); 
+                filterAndRenderProducts(); // (MODIFICADO)
             }
         };
 
@@ -1181,7 +1073,7 @@
         };
         
         const handleCartListClick = (e) => {
-            if (!isStoreCurrentlyOpen) return; 
+            if (!isStoreCurrentlyOpen) return; // (NUEVO) No hacer nada si la tienda está cerrada
             const removeBtn = e.target.closest('.remove-from-cart-btn');
             if (removeBtn) {
                 removeFromCart(parseInt(removeBtn.dataset.index));
@@ -1225,6 +1117,7 @@
         };
 
         const registerListeners = () => {
+            // (NUEVO) Listeners de búsqueda y filtros
             dom.searchBar.addEventListener('input', filterAndRenderProducts);
             dom.categoryFilters.addEventListener('click', handleCategoryFilterClick);
             
@@ -1251,7 +1144,7 @@
             });
             dom.extrasModal.modal.addEventListener('click', (e) => {
                 const btn = e.target.closest('.add-extra-btn');
-                if (btn && !btn.disabled) { 
+                if (btn && !btn.disabled) { // (MODIFICADO) Checar si no está deshabilitado
                     const productId = parseInt(btn.dataset.id);
                     const product = ALL_PRODUCTS.find(p => p.id === productId);
                     if (product) {
@@ -1269,7 +1162,7 @@
             });
             dom.extrasModal.modal.addEventListener('mouseout', (e) => {
                  const btn = e.target.closest('.add-extra-btn');
-                 if(btn && btn.disabled && btn.textContent === '¡Añadido!') { 
+                 if(btn && btn.disabled && btn.textContent === '¡Añadido!') { // (MODIFICADO) Solo resetear si dice "Añadido"
                       btn.textContent = 'Añadir';
                       btn.disabled = false;
                  }
@@ -1286,6 +1179,7 @@
             dom.flavorModal.closeBtn.addEventListener('click', closeAllModals);
             dom.qtyFlavorModal.closeBtn.addEventListener('click', closeAllModals);
             
+            // (NUEVO) Limpiar formulario al cerrar el modal de orden
             dom.orderModal.closeBtn.addEventListener('click', () => {
                 dom.orderModal.form.reset();
                 dom.orderModal.paymentSelect.dispatchEvent(new Event('change'));
@@ -1296,40 +1190,22 @@
             dom.cart.couponSelect.addEventListener('change', (e) => applyCoupon(e.target.value));
             dom.mobileCart.couponSelect.addEventListener('change', (e) => applyCoupon(e.target.value));
             document.body.addEventListener('click', (e) => {
-                if (e.target.id === 'remove-coupon-btn' && !e.target.disabled) { 
+                if (e.target.id === 'remove-coupon-btn' && !e.target.disabled) { // (MODIFICADO)
                     removeCoupon();
                 }
             });
-
-            // (NUEVO) Listeners de Admin
-            dom.admin.loginBtn.addEventListener('click', () => {
-                dom.admin.loginModal.classList.remove('hidden');
-                dom.admin.passwordInput.value = '';
-                dom.admin.passwordInput.focus();
-            });
-            dom.admin.cancelLogin.addEventListener('click', () => dom.admin.loginModal.classList.add('hidden'));
-            dom.admin.submitLogin.addEventListener('click', () => {
-                if (dom.admin.passwordInput.value === ADMIN_PASSWORD) {
-                    dom.admin.loginModal.classList.add('hidden');
-                    renderAdminProductList();
-                    dom.admin.panelModal.classList.remove('hidden');
-                } else {
-                    alert('Contraseña incorrecta');
-                }
-            });
-            dom.admin.closePanel.addEventListener('click', () => dom.admin.panelModal.classList.add('hidden'));
-            dom.admin.finishBtn.addEventListener('click', () => dom.admin.panelModal.classList.add('hidden'));
         };
 
         const init = () => {
             if (dom.categoryFilters && dom.productList) {
+                // (NUEVO) Verificar horario al cargar
                 const { isOpen } = checkStoreHours();
                 toggleOrdering(isOpen);
 
                 loadState();
                 productsToRender = getAvailableProducts(); 
                 renderCategoryFilters();
-                filterAndRenderProducts(); 
+                filterAndRenderProducts(); // (MODIFICADO) Usar la nueva función
                 renderCart();
                 renderExtrasModal();
                 registerListeners();
