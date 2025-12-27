@@ -254,15 +254,91 @@
             <div class="flex justify-between gap-2"><button id="admin-cancel-login" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">Cancelar</button><button id="admin-submit-login" class="flex-1 bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700">Entrar</button></div>
         </div>
     </div>
-    <div id="admin-panel-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl p-6 modal-content flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center mb-6 border-b pb-4"><h3 class="text-2xl font-bold text-slate-800">Administrar Disponibilidad</h3><button id="admin-close-panel" class="text-slate-500 hover:text-slate-700 font-bold text-xl">&times;</button></div>
-            <div class="mb-4"><p class="text-sm text-gray-500">Activa o desactiva los productos. Los productos desactivados no serán visibles para los clientes.</p></div>
-            <div id="admin-product-list" class="overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 pr-2"></div>
-            <div class="mt-6 text-right border-t pt-4"><button id="admin-finish-btn" class="bg-primary-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-primary-700">Listo / Guardar</button></div>
+    
+    <!-- NUEVO DISEÑO ESPACIOSO DEL PANEL DE ADMINISTRADOR -->
+    <div id="admin-panel-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-2 sm:p-4 hidden z-50">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-7xl flex flex-col h-[95vh] sm:h-[90vh] modal-content">
+            <!-- Header -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">Administrar Tienda</h3>
+                <button id="admin-close-panel" class="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-full hover:bg-slate-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Scrollable Content -->
+            <div class="overflow-y-auto flex-1 p-6 bg-slate-50">
+                <!-- Store Status Controls -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8">
+                    <h4 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Horario y Apertura
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="flex flex-col">
+                                <span class="font-semibold text-slate-700">Horario Automático</span>
+                                <span class="text-xs text-slate-500">Abrir/cerrar según la hora configurada</span>
+                            </div>
+                            <div class="relative inline-block w-14 align-middle select-none">
+                                <input type="checkbox" id="admin-toggle-schedule" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/>
+                                <label for="admin-toggle-schedule" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+                        <div id="admin-manual-status-container" class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 transition-opacity">
+                            <div class="flex flex-col">
+                                <span class="font-semibold text-slate-700">Forzar Apertura</span>
+                                <span class="text-xs text-slate-500">Abrir tienda manualmente</span>
+                            </div>
+                            <div class="relative inline-block w-14 align-middle select-none">
+                                <input type="checkbox" id="admin-toggle-manual-open" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/>
+                                <label for="admin-toggle-manual-open" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="mb-4 flex justify-between items-end">
+                    <div>
+                        <h4 class="text-lg font-bold text-slate-700">Disponibilidad de Productos</h4>
+                        <p class="text-sm text-slate-500 mt-1">Gestiona qué productos están visibles en el menú.</p>
+                    </div>
+                </div>
+                
+                <div id="admin-product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- JS will inject here -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-gray-100 bg-white rounded-b-xl flex justify-end">
+                <button id="admin-finish-btn" class="bg-primary-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-primary-700 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                    Guardar y Salir
+                </button>
+            </div>
         </div>
     </div>
-    <script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Initialize Firebase
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        let hiddenProducts = [];
+        let storeSettings = { useAutoSchedule: true, isManualOpen: true }; // Default settings
+
     const ENABLE_SCHEDULE_CHECK = true;
     const STORE_SCHEDULE = [
         { day: 0, slots: [ { open: { h: 16, m: 30 }, close: { h: 23, m: 55 } } ] },
@@ -347,7 +423,8 @@
             },
             confirmationModal: { modal: document.getElementById('confirmation-modal'), closeBtn: document.getElementById('close-confirmation-button') },
             admin: {
-                loginBtn: document.getElementById('admin-login-btn'), loginModal: document.getElementById('admin-login-modal'), passwordInput: document.getElementById('admin-password'), submitLogin: document.getElementById('admin-submit-login'), cancelLogin: document.getElementById('admin-cancel-login'), panelModal: document.getElementById('admin-panel-modal'), closePanel: document.getElementById('admin-close-panel'), finishBtn: document.getElementById('admin-finish-btn'), productList: document.getElementById('admin-product-list')
+                loginBtn: document.getElementById('admin-login-btn'), loginModal: document.getElementById('admin-login-modal'), passwordInput: document.getElementById('admin-password'), submitLogin: document.getElementById('admin-submit-login'), cancelLogin: document.getElementById('admin-cancel-login'), panelModal: document.getElementById('admin-panel-modal'), closePanel: document.getElementById('admin-close-panel'), finishBtn: document.getElementById('admin-finish-btn'), productList: document.getElementById('admin-product-list'),
+                toggleSchedule: document.getElementById('admin-toggle-schedule'), toggleManualOpen: document.getElementById('admin-toggle-manual-open'), manualStatusContainer: document.getElementById('admin-manual-status-container')
             }
         };
         
@@ -357,23 +434,124 @@
 
         setTimeout(() => { if(dom.introOverlay) { dom.introOverlay.classList.add('fade-out'); setTimeout(() => { dom.introOverlay.remove(); }, 800); } }, 3500);
 
-        const getHiddenProducts = () => { try { return JSON.parse(localStorage.getItem('wingsHouseHiddenProducts')) || []; } catch (e) { return []; } };
-        const toggleProductVisibility = (id) => {
-            let hidden = getHiddenProducts();
-            if (hidden.includes(id)) { hidden = hidden.filter(h => h !== id); } else { hidden.push(id); }
-            localStorage.setItem('wingsHouseHiddenProducts', JSON.stringify(hidden));
-            productsToRender = getAvailableProducts(); renderCategoryFilters(); filterAndRenderProducts();
+        // --- Firebase Integration Logic ---
+        
+        // 1. Auth Init
+        const initAuth = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
         };
+
+        // 2. Real-time Availability Sync
+        const subscribeToSettings = () => {
+            const settingsDoc = doc(db, 'artifacts', appId, 'public', 'data', 'store_settings', 'availability');
+            
+            onSnapshot(settingsDoc, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    hiddenProducts = data.hiddenIds || [];
+                    storeSettings.useAutoSchedule = data.useAutoSchedule !== undefined ? data.useAutoSchedule : true;
+                    storeSettings.isManualOpen = data.isManualOpen !== undefined ? data.isManualOpen : true;
+                } else {
+                    hiddenProducts = [];
+                    // Default store settings already set in let storeSettings
+                }
+                
+                // Update Admin UI controls based on fetched settings
+                if (dom.admin.toggleSchedule) dom.admin.toggleSchedule.checked = storeSettings.useAutoSchedule;
+                if (dom.admin.toggleManualOpen) dom.admin.toggleManualOpen.checked = storeSettings.isManualOpen;
+                updateAdminManualControlsUI();
+
+                // Refresh views with new hidden status & schedule
+                const { isOpen } = checkStoreHours();
+                toggleOrdering(isOpen);
+                
+                productsToRender = getAvailableProducts();
+                renderCategoryFilters(); 
+                filterAndRenderProducts();
+                renderExtrasModal();
+                // If admin panel is open, refresh it too
+                if (!dom.admin.panelModal.classList.contains('hidden')) {
+                    renderAdminProductList();
+                }
+            }, (error) => {
+                console.error("Error syncing settings:", error);
+            });
+        };
+
+        const updateAdminManualControlsUI = () => {
+            if (storeSettings.useAutoSchedule) {
+                dom.admin.manualStatusContainer.classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                dom.admin.manualStatusContainer.classList.remove('opacity-50', 'pointer-events-none');
+            }
+        };
+
+        const saveStoreSettings = async () => {
+            try {
+                const settingsDoc = doc(db, 'artifacts', appId, 'public', 'data', 'store_settings', 'availability');
+                await setDoc(settingsDoc, { 
+                    hiddenIds: hiddenProducts,
+                    useAutoSchedule: storeSettings.useAutoSchedule,
+                    isManualOpen: storeSettings.isManualOpen
+                }, { merge: true });
+            } catch (e) {
+                console.error("Error saving settings:", e);
+                alert("Error al guardar cambios. Verifica tu conexión.");
+            }
+        };
+
+        const toggleProductVisibility = async (id) => {
+            if (hiddenProducts.includes(id)) { 
+                hiddenProducts = hiddenProducts.filter(h => h !== id); 
+            } else { 
+                hiddenProducts.push(id); 
+            }
+            renderAdminProductList();
+            await saveStoreSettings();
+        };
+
         const renderAdminProductList = () => {
-            const hidden = getHiddenProducts();
             dom.admin.productList.innerHTML = ALL_PRODUCTS.map(product => {
-                const isHidden = hidden.includes(product.id);
-                return `<div class="flex items-center justify-between p-3 border rounded-lg bg-gray-50"><div class="text-sm"><p class="font-bold text-slate-800">${product.name}</p><p class="text-xs text-slate-500">${product.category}</p></div><div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"><input type="checkbox" name="toggle" id="toggle-${product.id}" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300" ${!isHidden ? 'checked' : ''} onchange="window.handleAdminToggle(${product.id})"/><label for="toggle-${product.id}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label></div></div>`;
+                const isHidden = hiddenProducts.includes(product.id);
+                // Estilos para tarjetas activas e inactivas
+                const activeClass = !isHidden ? 'border-green-500 ring-1 ring-green-500 bg-green-50' : 'border-gray-200 bg-white';
+                const textClass = !isHidden ? 'text-green-800' : 'text-slate-600';
+                
+                return `
+                    <div class="flex items-center justify-between p-4 border rounded-xl transition-all duration-200 ${activeClass} hover:shadow-md">
+                        <div class="flex-1 pr-4">
+                            <p class="font-bold ${textClass} text-lg">${product.name}</p>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide font-semibold mt-1">${product.category}</p>
+                        </div>
+                        <div class="relative inline-block w-14 align-middle select-none shrink-0">
+                            <input type="checkbox" name="toggle" id="toggle-${product.id}" 
+                                class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300" 
+                                ${!isHidden ? 'checked' : ''} 
+                                onchange="window.handleAdminToggle(${product.id})"/>
+                            <label for="toggle-${product.id}" 
+                                class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
+                        </div>
+                    </div>
+                `;
             }).join('');
         };
+        
         window.handleAdminToggle = (id) => { toggleProductVisibility(id); };
 
         const checkStoreHours = () => {
+            // First check override settings
+            if (!storeSettings.useAutoSchedule) {
+                if (storeSettings.isManualOpen) {
+                    return { isOpen: true, message: '' };
+                } else {
+                    return { isOpen: false, message: 'La tienda está cerrada temporalmente.' };
+                }
+            }
+
             if (!ENABLE_SCHEDULE_CHECK) return { isOpen: true, message: '' };
             try {
                 const now = new Date(); const today = now.getDay(); const currentHour = now.getHours(); const currentMinute = now.getMinutes(); const currentTimeInMinutes = currentHour * 60 + currentMinute;
@@ -402,7 +580,8 @@
         const loadState = () => { try { const savedCart = localStorage.getItem('wingsHouseCart'); const savedCoupon = localStorage.getItem('wingsHouseCoupon'); if (savedCart) state.cart = JSON.parse(savedCart); if (savedCoupon) state.appliedCoupon = JSON.parse(savedCoupon); } catch (e) { console.error("Error al cargar desde LocalStorage:", e); state.cart = []; state.appliedCoupon = null; } };
 
         const getAvailableProducts = () => {
-            const now = new Date(); const today = now.getDay(); const hiddenProducts = getHiddenProducts();
+            const now = new Date(); const today = now.getDay();
+            // Using global hiddenProducts array synced from Firebase
             return ALL_PRODUCTS.filter(product => {
                 if (hiddenProducts.includes(product.id)) return false;
                 switch(product.id) { case 14: return today === 1; case 15: return today === 2; case 21: return today === 3 || today === 4; case 26: return today === 3; case 32: return new Date() <= new Date('2025-11-23T23:59:59'); default: return true; }
@@ -433,7 +612,8 @@
         };
 
         const renderExtrasModal = () => {
-            const hidden = getHiddenProducts(); const extras = ALL_PRODUCTS.filter(p => p.category === 'Extras' && !hidden.includes(p.id)); const bebidas = ALL_PRODUCTS.filter(p => p.category === 'Bebidas' && !hidden.includes(p.id));
+            // Using global hiddenProducts array synced from Firebase
+            const extras = ALL_PRODUCTS.filter(p => p.category === 'Extras' && !hiddenProducts.includes(p.id)); const bebidas = ALL_PRODUCTS.filter(p => p.category === 'Bebidas' && !hiddenProducts.includes(p.id));
             const createItemHTML = (product) => `<div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg"><div><span class="font-semibold text-slate-800">${product.name}</span><span class="text-slate-600 ml-2">${formatCurrency(product.price)}</span></div><button data-id="${product.id}" class="add-extra-btn bg-primary-600 text-white font-bold py-1 px-3 rounded-full hover:bg-primary-700 transition-colors text-sm" ${!isStoreCurrentlyOpen ? 'disabled' : ''}>${!isStoreCurrentlyOpen ? 'Cerrado' : 'Añadir'}</button></div>`;
             dom.extrasModal.listExtras.innerHTML = extras.map(createItemHTML).join(''); dom.extrasModal.listBebidas.innerHTML = bebidas.map(createItemHTML).join('');
         };
@@ -560,7 +740,7 @@
         
         const handleOrderFormSubmit = (e) => {
             e.preventDefault(); const formData = new FormData(dom.orderModal.form); const customerData = Object.fromEntries(formData.entries());
-            const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0); const shippingCost = (subtotal > 0 && subtotal < SHIPPING_THRESHOLD) ? SHIPPING_COST_VALUE : 0; let discount = 0; if (state.appliedCoupon && state.appliedCoupon.type === 'discount') discount = state.appliedCoupon.value;
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0); const shippingCost = (subtotal > 0 && subtotal < SHIPPING_COST_VALUE) ? SHIPPING_COST_VALUE : 0; let discount = 0; if (state.appliedCoupon && state.appliedCoupon.type === 'discount') discount = state.appliedCoupon.value;
             const total = subtotal + shippingCost - discount; const amount = parseFloat(customerData.amount); const cambio = (['Con Cambio', 'Efectivo'].includes(customerData.payment) && !isNaN(amount) && amount >= total) ? amount - total : 0;
             sendOrderToWhatsApp({ customer: customerData, items: state.cart, subtotal, shippingCost, total, cambio, coupon: state.appliedCoupon }); closeAllModals(); dom.confirmationModal.modal.classList.remove('hidden');
         };
@@ -582,10 +762,36 @@
             dom.admin.cancelLogin.addEventListener('click', () => dom.admin.loginModal.classList.add('hidden'));
             dom.admin.submitLogin.addEventListener('click', () => { if (dom.admin.passwordInput.value === ADMIN_PASSWORD) { dom.admin.loginModal.classList.add('hidden'); renderAdminProductList(); dom.admin.panelModal.classList.remove('hidden'); } else { alert('Contraseña incorrecta'); } });
             dom.admin.closePanel.addEventListener('click', () => dom.admin.panelModal.classList.add('hidden')); dom.admin.finishBtn.addEventListener('click', () => dom.admin.panelModal.classList.add('hidden'));
+            
+            // New Listeners for Store Status Controls
+            dom.admin.toggleSchedule.addEventListener('change', async (e) => {
+                storeSettings.useAutoSchedule = e.target.checked;
+                updateAdminManualControlsUI();
+                await saveStoreSettings();
+            });
+            dom.admin.toggleManualOpen.addEventListener('change', async (e) => {
+                storeSettings.isManualOpen = e.target.checked;
+                await saveStoreSettings();
+            });
         };
 
-        const init = () => {
-            if (dom.categoryFilters && dom.productList) { const { isOpen } = checkStoreHours(); toggleOrdering(isOpen); loadState(); productsToRender = getAvailableProducts(); renderCategoryFilters(); filterAndRenderProducts(); renderCart(); renderExtrasModal(); registerListeners(); } else { console.error("No se pudieron encontrar los elementos principales del DOM."); }
+        const init = async () => {
+            if (dom.categoryFilters && dom.productList) { 
+                await initAuth(); // Wait for auth first
+                const { isOpen } = checkStoreHours(); 
+                toggleOrdering(isOpen); 
+                loadState(); 
+                subscribeToSettings(); // Init Firestore subscription
+                
+                // Initial render will happen inside subscribeToSettings once data arrives
+                // but let's do a fallback render first
+                productsToRender = getAvailableProducts(); 
+                renderCategoryFilters(); 
+                filterAndRenderProducts(); 
+                renderCart(); 
+                renderExtrasModal(); 
+                registerListeners(); 
+            } else { console.error("No se pudieron encontrar los elementos principales del DOM."); }
         };
         init();
     });
