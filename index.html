@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Meta etiquetas para evitar el caché y asegurar que se vea la actualización de GitHub inmediatamente -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>Wing's House - Menú Digital y Pedidos</title>
     <meta name="description" content="Explora nuestro menú de alitas, boneless, paquetes y más. Haz tu pedido fácilmente y te lo enviamos por WhatsApp.">
     
@@ -1134,6 +1140,17 @@
             if (e.target.matches('.category-filter-btn')) {
                 document.querySelectorAll('.category-filter-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
+                
+                // Actualizar la URL para persistir la categoría
+                const category = e.target.dataset.category;
+                const url = new URL(window.location);
+                if (category === 'Todos') {
+                    url.searchParams.delete('category');
+                } else {
+                    url.searchParams.set('category', category);
+                }
+                window.history.replaceState(null, '', url);
+
                 filterAndRenderProducts(); 
             }
         };
