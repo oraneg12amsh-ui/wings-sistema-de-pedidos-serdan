@@ -69,6 +69,11 @@
         #product-list > div:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-color: #fca5a5; }
         .toggle-checkbox:checked { right: 0; border-color: #68D391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
+        /* Toast Notification Styles */
+        #toast-container { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 100; pointer-events: none; width: 90%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(5px); color: white; padding: 12px 20px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); display: flex; align-items: center; justify-content: space-between; font-weight: 500; font-size: 0.95rem; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast-icon { margin-right: 10px; font-size: 1.2rem; }
     </style>
 </head>
 <body class="font-sans p-4 md:p-8 text-slate-700">
@@ -91,9 +96,14 @@
             </div>
         </div>
     </div>
+    
     <div class="snowflakes" aria-hidden="true">
         <div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div><div class="snowflake">❅</div><div class="snowflake">❆</div>
     </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
     <header class="text-center mb-8 max-w-3xl mx-auto relative z-10">
         <div class="flex justify-center items-center gap-4 mb-4">
             <div class="bg-white border-2 border-primary-500 text-primary-600 p-3 rounded-full shadow-lg christmas-header-icon relative">
@@ -110,12 +120,14 @@
         </div>
         <p class="text-slate-600 text-lg bg-white/80 inline-block px-4 py-1 rounded-full backdrop-blur-sm shadow-sm">Selecciona tus productos y completa tu pedido</p>
     </header>
+
     <div id="store-closed-banner" class="max-w-6xl mx-auto bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-lg mb-8 hidden" role="alert">
         <div class="flex">
             <div class="py-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 mr-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
             <div><p class="font-bold">¡Estamos cerrados!</p><p id="store-closed-message" class="text-sm">Nuestro horario de atención es de 1:00 PM a 10:00 PM. Puedes ver el menú, pero no se podrán tomar pedidos hasta que abramos.</p></div>
         </div>
     </div>
+
     <div class="max-w-6xl mx-auto bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 mb-8 border border-primary-200 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-green-500 to-red-500"></div>
         <h2 class="text-2xl font-semibold text-slate-800 mb-4 text-center">¿Cómo ordenar?</h2>
@@ -150,15 +162,21 @@
             </div>
         </div>
     </div>
+    
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-500">
             <h2 class="text-2xl font-semibold text-slate-800 mb-4 flex items-center gap-2">Productos Disponibles <span class="text-xl">🎁</span></h2>
-            <div class="relative mb-6">
-                <input type="search" id="search-bar" placeholder="Buscar producto..." class="w-full border border-slate-300 rounded-lg p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-shadow shadow-sm hover:shadow-md">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
+            
+            <!-- Sticky Category Header -->
+            <div class="sticky top-0 z-40 bg-slate-50/95 backdrop-blur-sm -mx-6 px-6 py-4 border-b border-gray-100 shadow-sm transition-all">
+                <div class="relative mb-4">
+                    <input type="search" id="search-bar" placeholder="Buscar producto..." class="w-full border border-slate-300 rounded-lg p-3 pl-10 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-shadow shadow-sm hover:shadow-md">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
+                </div>
+                <div class="flex flex-wrap justify-center gap-2" id="category-filters"></div>
             </div>
-            <div class="flex flex-wrap justify-center gap-2 mb-6" id="category-filters"></div>
-            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+
+            <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6"></div>
         </div>
         <div id="cart-section" class="bg-white rounded-xl shadow-lg p-6 h-fit sticky top-8 lg:block hidden transition-all duration-300 border-t-4 border-primary-500">
             <h2 class="text-2xl font-semibold text-slate-800 mb-6 flex justify-between items-center">Tu Carrito 🛒 <button id="clear-cart-button" class="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 hidden">Vaciar Carrito</button></h2>
@@ -181,10 +199,17 @@
             <button id="checkout-button" class="w-full bg-primary-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-primary-700 transition-colors duration-300 shadow-md disabled:bg-primary-400 disabled:cursor-not-allowed" disabled>Finalizar Pedido</button>
         </div>
     </div>
+    
+    <!-- Mobile Cart Button with Badge -->
     <button id="mobile-cart-button" class="lg:hidden fixed bottom-4 right-4 bg-primary-600 text-white font-bold p-4 rounded-full shadow-lg transition-transform transform hover:scale-110 active:scale-95 z-50 ring-4 ring-white">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+        <div class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+            <span id="mobile-cart-count" class="absolute -top-3 -right-3 bg-green-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center border-2 border-white hidden shadow-sm">0</span>
+        </div>
     </button>
+    
     <div id="cart-mobile-view" class="cart-mobile-view bg-white rounded-t-xl shadow-lg p-6 border-t-4 border-primary-500">
+        <!-- ... (Existing mobile cart content) ... -->
         <h2 class="text-2xl font-semibold text-slate-800 mb-6 flex justify-between items-center">Tu Carrito 🛒 <button id="close-mobile-cart-button" class="text-sm text-slate-500 hover:text-slate-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></h2>
         <div id="cart-list-mobile" class="space-y-2 mb-6"><p id="empty-cart-message-mobile" class="text-slate-500 text-center">El carrito está vacío.</p></div>
         <div id="coupon-area-mobile" class="border-t pt-4">
@@ -200,6 +225,8 @@
         </div>
         <button id="checkout-button-mobile" class="w-full bg-primary-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-primary-700 shadow-md disabled:bg-primary-400 disabled:cursor-not-allowed" disabled>Finalizar Pedido</button>
     </div>
+    
+    <!-- ... (Existing Modals & Admin Panel - No changes needed to structure) ... -->
     <div id="extras-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-8 modal-content border-4 border-green-500">
             <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold text-slate-800">¡Añade un extra a tu orden! 🍟</h3><button id="close-extras-modal-button" class="text-slate-400 hover:text-slate-600"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></div>
@@ -256,76 +283,23 @@
             <div class="flex justify-between gap-2"><button id="admin-cancel-login" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">Cancelar</button><button id="admin-submit-login" class="flex-1 bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700">Entrar</button></div>
         </div>
     </div>
-    
-    <!-- NUEVO DISEÑO ESPACIOSO DEL PANEL DE ADMINISTRADOR -->
     <div id="admin-panel-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-2 sm:p-4 hidden z-50">
         <div class="bg-white rounded-xl shadow-xl w-full max-w-7xl flex flex-col h-[95vh] sm:h-[90vh] modal-content">
-            <!-- Header -->
-            <div class="flex justify-between items-center p-6 border-b border-gray-100">
-                <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">Administrar Tienda</h3>
-                <button id="admin-close-panel" class="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-full hover:bg-slate-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Scrollable Content -->
+            <div class="flex justify-between items-center p-6 border-b border-gray-100"><h3 class="text-2xl sm:text-3xl font-bold text-slate-800">Administrar Tienda</h3><button id="admin-close-panel" class="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-full hover:bg-slate-100"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button></div>
             <div class="overflow-y-auto flex-1 p-6 bg-slate-50">
-                <!-- Store Status Controls -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8">
-                    <h4 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Horario y Apertura
-                    </h4>
+                    <h4 class="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Horario y Apertura</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
-                            <div class="flex flex-col">
-                                <span class="font-semibold text-slate-700">Horario Automático</span>
-                                <span class="text-xs text-slate-500">Abrir/cerrar según la hora configurada</span>
-                            </div>
-                            <div class="relative inline-block w-14 align-middle select-none">
-                                <input type="checkbox" id="admin-toggle-schedule" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/>
-                                <label for="admin-toggle-schedule" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
-                            </div>
-                        </div>
-                        <div id="admin-manual-status-container" class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 transition-opacity">
-                            <div class="flex flex-col">
-                                <span class="font-semibold text-slate-700">Forzar Apertura</span>
-                                <span class="text-xs text-slate-500">Abrir tienda manualmente</span>
-                            </div>
-                            <div class="relative inline-block w-14 align-middle select-none">
-                                <input type="checkbox" id="admin-toggle-manual-open" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/>
-                                <label for="admin-toggle-manual-open" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
-                            </div>
-                        </div>
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100"><div class="flex flex-col"><span class="font-semibold text-slate-700">Horario Automático</span><span class="text-xs text-slate-500">Abrir/cerrar según la hora configurada</span></div><div class="relative inline-block w-14 align-middle select-none"><input type="checkbox" id="admin-toggle-schedule" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/><label for="admin-toggle-schedule" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label></div></div>
+                        <div id="admin-manual-status-container" class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100 transition-opacity"><div class="flex flex-col"><span class="font-semibold text-slate-700">Forzar Apertura</span><span class="text-xs text-slate-500">Abrir tienda manualmente</span></div><div class="relative inline-block w-14 align-middle select-none"><input type="checkbox" id="admin-toggle-manual-open" class="toggle-checkbox absolute block w-7 h-7 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300"/><label for="admin-toggle-manual-open" class="toggle-label block overflow-hidden h-7 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label></div></div>
                     </div>
                 </div>
-
-                <!-- Products Grid -->
-                <div class="mb-4 flex justify-between items-end">
-                    <div>
-                        <h4 class="text-lg font-bold text-slate-700">Disponibilidad de Productos</h4>
-                        <p class="text-sm text-slate-500 mt-1">Gestiona qué productos están visibles en el menú.</p>
-                    </div>
-                </div>
-                
-                <div id="admin-product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    <!-- JS will inject here -->
-                </div>
+                <div class="mb-4 flex justify-between items-end"><div><h4 class="text-lg font-bold text-slate-700">Disponibilidad de Productos</h4><p class="text-sm text-slate-500 mt-1">Gestiona qué productos están visibles en el menú.</p></div></div>
+                <div id="admin-product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
             </div>
-
-            <!-- Footer -->
-            <div class="p-4 border-t border-gray-100 bg-white rounded-b-xl flex justify-end">
-                <button id="admin-finish-btn" class="bg-primary-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-primary-700 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">
-                    Guardar y Salir
-                </button>
-            </div>
+            <div class="p-4 border-t border-gray-100 bg-white rounded-b-xl flex justify-end"><button id="admin-finish-btn" class="bg-primary-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-primary-700 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">Guardar y Salir</button></div>
         </div>
     </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -341,10 +315,9 @@
             measurementId: "G-DXV79WQJNM" 
         };
         
-        // Inicialización Híbrida (Nube o Local)
         let app, auth, db;
         let firebaseReady = false;
-        const appId = 'wings-house-v1'; // Identificador para la BD
+        const appId = 'wings-house-v1';
 
         try {
             if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "") {
@@ -354,7 +327,6 @@
                 firebaseReady = true;
                 console.log("Modo Online: Firebase activado");
             } else {
-                // Intento de fallback para entorno de prueba si existe la variable global (solo para desarrollo)
                 if (typeof __firebase_config !== 'undefined') {
                     const previewConfig = JSON.parse(__firebase_config);
                     app = initializeApp(previewConfig);
@@ -440,7 +412,7 @@
                 list: document.getElementById('cart-list'), subtotal: document.getElementById('cart-subtotal'), shipping: document.getElementById('shipping-cost'), shippingPromo: document.getElementById('shipping-promo-desktop'), total: document.getElementById('cart-total'), emptyMsg: document.getElementById('empty-cart-message'), checkoutBtn: document.getElementById('checkout-button'), clearBtn: document.getElementById('clear-cart-button'), section: document.getElementById('cart-section'), couponSelect: document.getElementById('coupon-select-desktop'), couponMsg: document.getElementById('coupon-message-desktop'), discountRow: document.getElementById('discount-row-desktop'), discountAmount: document.getElementById('cart-discount-desktop')
             },
             mobileCart: {
-                view: document.getElementById('cart-mobile-view'), list: document.getElementById('cart-list-mobile'), subtotal: document.getElementById('cart-subtotal-mobile'), shipping: document.getElementById('shipping-cost-mobile'), shippingPromo: document.getElementById('shipping-promo-mobile'), total: document.getElementById('cart-total-mobile'), emptyMsg: document.getElementById('empty-cart-message-mobile'), checkoutBtn: document.getElementById('checkout-button-mobile'), openBtn: document.getElementById('mobile-cart-button'), closeBtn: document.getElementById('close-mobile-cart-button'), couponSelect: document.getElementById('coupon-select-mobile'), couponMsg: document.getElementById('coupon-message-mobile'), discountRow: document.getElementById('discount-row-mobile'), discountAmount: document.getElementById('cart-discount-mobile')
+                view: document.getElementById('cart-mobile-view'), list: document.getElementById('cart-list-mobile'), subtotal: document.getElementById('cart-subtotal-mobile'), shipping: document.getElementById('shipping-cost-mobile'), shippingPromo: document.getElementById('shipping-promo-mobile'), total: document.getElementById('cart-total-mobile'), emptyMsg: document.getElementById('empty-cart-message-mobile'), checkoutBtn: document.getElementById('checkout-button-mobile'), openBtn: document.getElementById('mobile-cart-button'), closeBtn: document.getElementById('close-mobile-cart-button'), couponSelect: document.getElementById('coupon-select-mobile'), couponMsg: document.getElementById('coupon-message-mobile'), discountRow: document.getElementById('discount-row-mobile'), discountAmount: document.getElementById('cart-discount-mobile'), countBadge: document.getElementById('mobile-cart-count')
             },
             orderModal: {
                 modal: document.getElementById('order-modal'), form: document.getElementById('order-form'), closeBtn: document.getElementById('close-modal-button'), paymentSelect: document.getElementById('payment'), amountContainer: document.getElementById('amount-field-container'), amountInput: document.getElementById('amount'), cambioField: document.getElementById('cambio-field'), cambioTotal: document.getElementById('cambio-total'), paymentTotal: document.getElementById('payment-total-amount'),
@@ -469,15 +441,10 @@
 
         // --- Firebase Integration Logic ---
         
-        // 1. Auth Init
         const initAuth = async () => {
-            if (!firebaseReady) return; // Skip if no firebase
-            
+            if (!firebaseReady) return; 
             try {
-                // Si estamos usando la configuración manual del usuario, NO usar el token del entorno de prueba
-                // El token __initial_auth_token solo sirve para el proyecto interno de Canvas, no para el del usuario.
                 const isManualConfig = firebaseConfig.apiKey && firebaseConfig.apiKey !== "";
-
                 if (!isManualConfig && typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
@@ -485,15 +452,12 @@
                 }
             } catch (e) {
                 console.error("Auth error (retrying anon):", e);
-                // Fallback de seguridad
                 try { await signInAnonymously(auth); } catch(ee) { console.error("Anon auth failed", ee)}
             }
         };
 
-        // 2. Real-time Availability Sync
         const subscribeToSettings = () => {
             if (!firebaseReady) {
-                // Fallback to LocalStorage if Firebase is missing
                 try {
                     const savedHidden = JSON.parse(localStorage.getItem('wingsHouseHiddenProducts'));
                     if (savedHidden) hiddenProducts = savedHidden;
@@ -514,7 +478,6 @@
                     storeSettings.isManualOpen = data.isManualOpen !== undefined ? data.isManualOpen : true;
                 } else {
                     hiddenProducts = [];
-                    // Default store settings already set in let storeSettings
                 }
                 
                 refreshViews();
@@ -524,12 +487,10 @@
         };
 
         const refreshViews = () => {
-             // Update Admin UI controls
              if (dom.admin.toggleSchedule) dom.admin.toggleSchedule.checked = storeSettings.useAutoSchedule;
              if (dom.admin.toggleManualOpen) dom.admin.toggleManualOpen.checked = storeSettings.isManualOpen;
              updateAdminManualControlsUI();
 
-             // Refresh app views
              const { isOpen } = checkStoreHours();
              toggleOrdering(isOpen);
              productsToRender = getAvailableProducts();
@@ -552,7 +513,6 @@
 
         const saveStoreSettings = async () => {
             if (!firebaseReady) {
-                // Save locally
                 localStorage.setItem('wingsHouseHiddenProducts', JSON.stringify(hiddenProducts));
                 localStorage.setItem('wingsHouseSettings', JSON.stringify(storeSettings));
                 refreshViews();
@@ -567,7 +527,7 @@
                 }, { merge: true });
             } catch (e) {
                 console.error("Error saving settings:", e);
-                alert("Error al guardar en la nube. Revisa tu conexión o configuración.");
+                showToast("Error al guardar cambios.", "error");
             }
         };
 
@@ -577,7 +537,6 @@
             } else { 
                 hiddenProducts.push(id); 
             }
-            // Optimistic update for UI responsiveness
             if (dom.admin.panelModal.classList.contains('hidden') === false) {
                  renderAdminProductList();
             }
@@ -587,7 +546,6 @@
         const renderAdminProductList = () => {
             dom.admin.productList.innerHTML = ALL_PRODUCTS.map(product => {
                 const isHidden = hiddenProducts.includes(product.id);
-                // Estilos para tarjetas activas e inactivas
                 const activeClass = !isHidden ? 'border-green-500 ring-1 ring-green-500 bg-green-50' : 'border-gray-200 bg-white';
                 const textClass = !isHidden ? 'text-green-800' : 'text-slate-600';
                 
@@ -613,7 +571,6 @@
         window.handleAdminToggle = (id) => { toggleProductVisibility(id); };
 
         const checkStoreHours = () => {
-            // First check override settings
             if (!storeSettings.useAutoSchedule) {
                 if (storeSettings.isManualOpen) {
                     return { isOpen: true, message: '' };
@@ -647,11 +604,44 @@
         };
 
         const saveState = () => { try { localStorage.setItem('wingsHouseCart', JSON.stringify(state.cart)); localStorage.setItem('wingsHouseCoupon', JSON.stringify(state.appliedCoupon)); } catch (e) { console.error("Error al guardar en LocalStorage:", e); } };
-        const loadState = () => { try { const savedCart = localStorage.getItem('wingsHouseCart'); const savedCoupon = localStorage.getItem('wingsHouseCoupon'); if (savedCart) state.cart = JSON.parse(savedCart); if (savedCoupon) state.appliedCoupon = JSON.parse(savedCoupon); } catch (e) { console.error("Error al cargar desde LocalStorage:", e); state.cart = []; state.appliedCoupon = null; } };
+        
+        // Load Cart AND User Data
+        const loadState = () => { 
+            try { 
+                const savedCart = localStorage.getItem('wingsHouseCart'); 
+                const savedCoupon = localStorage.getItem('wingsHouseCoupon'); 
+                const savedUser = localStorage.getItem('wingsHouseUser'); // New
+
+                if (savedCart) state.cart = JSON.parse(savedCart); 
+                if (savedCoupon) state.appliedCoupon = JSON.parse(savedCoupon); 
+                
+                // Pre-fill user data
+                if (savedUser) {
+                    const userData = JSON.parse(savedUser);
+                    if (dom.orderModal.form.name) dom.orderModal.form.name.value = userData.name || '';
+                    if (dom.orderModal.form.address) dom.orderModal.form.address.value = userData.address || '';
+                    if (dom.orderModal.form.details) dom.orderModal.form.details.value = userData.details || '';
+                }
+            } catch (e) { 
+                console.error("Error al cargar desde LocalStorage:", e); 
+                state.cart = []; 
+                state.appliedCoupon = null; 
+            } 
+        };
+
+        const saveUserData = (data) => {
+            try {
+                const userData = {
+                    name: data.name,
+                    address: data.address,
+                    details: data.details
+                };
+                localStorage.setItem('wingsHouseUser', JSON.stringify(userData));
+            } catch (e) { console.error("Error saving user data", e); }
+        };
 
         const getAvailableProducts = () => {
             const now = new Date(); const today = now.getDay();
-            // Using global hiddenProducts array synced from Firebase
             return ALL_PRODUCTS.filter(product => {
                 if (hiddenProducts.includes(product.id)) return false;
                 switch(product.id) { case 14: return today === 1; case 15: return today === 2; case 21: return today === 3 || today === 4; case 26: return today === 3; case 32: return new Date() <= new Date('2025-11-23T23:59:59'); default: return true; }
@@ -682,7 +672,6 @@
         };
 
         const renderExtrasModal = () => {
-            // Using global hiddenProducts array synced from Firebase
             const extras = ALL_PRODUCTS.filter(p => p.category === 'Extras' && !hiddenProducts.includes(p.id)); const bebidas = ALL_PRODUCTS.filter(p => p.category === 'Bebidas' && !hiddenProducts.includes(p.id));
             const createItemHTML = (product) => `<div class="flex justify-between items-center bg-slate-50 p-3 rounded-lg"><div><span class="font-semibold text-slate-800">${product.name}</span><span class="text-slate-600 ml-2">${formatCurrency(product.price)}</span></div><button data-id="${product.id}" class="add-extra-btn bg-primary-600 text-white font-bold py-1 px-3 rounded-full hover:bg-primary-700 transition-colors text-sm" ${!isStoreCurrentlyOpen ? 'disabled' : ''}>${!isStoreCurrentlyOpen ? 'Cerrado' : 'Añadir'}</button></div>`;
             dom.extrasModal.listExtras.innerHTML = extras.map(createItemHTML).join(''); dom.extrasModal.listBebidas.innerHTML = bebidas.map(createItemHTML).join('');
@@ -706,6 +695,16 @@
             renderList(dom.cart.list, dom.cart.emptyMsg); renderList(dom.mobileCart.list, dom.mobileCart.emptyMsg); updateCartTotals(); 
             const isCartEmpty = state.cart.length === 0;
             dom.cart.checkoutBtn.disabled = isCartEmpty || !isStoreCurrentlyOpen; dom.mobileCart.checkoutBtn.disabled = isCartEmpty || !isStoreCurrentlyOpen; dom.cart.clearBtn.classList.toggle('hidden', isCartEmpty);
+            
+            // Update mobile badge
+            const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalItems > 0) {
+                dom.mobileCart.countBadge.textContent = totalItems;
+                dom.mobileCart.countBadge.classList.remove('hidden');
+            } else {
+                dom.mobileCart.countBadge.classList.add('hidden');
+            }
+
             if (state.appliedCoupon) {
                 const tagHTML = `<span class="coupon-applied-tag text-sm font-semibold px-3 py-1 border rounded-full flex items-center">${state.appliedCoupon.code}<button id="remove-coupon-btn" class="ml-2 text-green-800 hover:text-red-600 font-bold" ${!isStoreCurrentlyOpen ? 'disabled' : ''}>&times;</button></span>`;
                 dom.cart.couponMsg.innerHTML = tagHTML; dom.mobileCart.couponMsg.innerHTML = tagHTML; dom.cart.couponSelect.disabled = true; dom.mobileCart.couponSelect.disabled = true;
@@ -735,6 +734,24 @@
             if (total === undefined) { const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0); const shippingCost = (subtotal > 0 && subtotal < SHIPPING_THRESHOLD) ? SHIPPING_COST_VALUE : 0; let discount = 0; if (state.appliedCoupon && state.appliedCoupon.type === 'discount') discount = state.appliedCoupon.value; total = subtotal + shippingCost - discount; }
             const amount = parseFloat(dom.orderModal.amountInput.value); const isCashPayment = ['Con Cambio', 'Efectivo'].includes(dom.orderModal.paymentSelect.value);
             if (isCashPayment && !isNaN(amount) && amount >= total) { const cambio = amount - total; dom.orderModal.cambioTotal.textContent = formatCurrency(cambio); dom.orderModal.cambioField.classList.remove('hidden'); } else { dom.orderModal.cambioField.classList.add('hidden'); }
+        };
+
+        const showToast = (message, type = 'success') => {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            const icon = type === 'success' ? '✅' : '⚠️';
+            toast.innerHTML = `<span class="toast-icon">${icon}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            
+            // Trigger animation
+            requestAnimationFrame(() => { toast.classList.add('show'); });
+
+            // Remove after delay
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3000);
         };
 
         const addToCart = (product, quantity = 1, flavors = [], bypassExtrasCheck = false) => {
@@ -799,7 +816,10 @@
 
         const handleProductListClick = (e) => {
             const card = e.target.closest('.cursor-pointer[data-id]'); if (!card) return; const productId = parseInt(card.dataset.id); const product = productsToRender.find(p => p.id === productId); if (!product) return; dom.mobileCart.view.classList.remove('active');
-            if (product.requiresFlavorSelection) { openFlavorModal(product); } else { addToCart(product, 1, []); const btn = card.querySelector('.add-to-cart-btn'); if (btn) { btn.textContent = '¡Añadido!'; btn.classList.add('bg-green-500', 'hover:bg-green-600'); btn.classList.remove('bg-primary-600', 'hover:bg-primary-700'); setTimeout(() => { btn.textContent = 'Añadir'; btn.classList.remove('bg-green-500', 'hover:bg-green-600'); btn.classList.add('bg-primary-600', 'hover:bg-primary-700'); }, 1500); } }
+            if (product.requiresFlavorSelection) { openFlavorModal(product); } else { addToCart(product, 1, []); 
+                // Show Toast instead of changing button text
+                showToast(`¡${product.name} añadido al carrito!`);
+            }
         };
         
         const handleCartListClick = (e) => {
@@ -810,6 +830,10 @@
         
         const handleOrderFormSubmit = (e) => {
             e.preventDefault(); const formData = new FormData(dom.orderModal.form); const customerData = Object.fromEntries(formData.entries());
+            
+            // Save user data for next time
+            saveUserData(customerData);
+
             const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0); const shippingCost = (subtotal > 0 && subtotal < SHIPPING_COST_VALUE) ? SHIPPING_COST_VALUE : 0; let discount = 0; if (state.appliedCoupon && state.appliedCoupon.type === 'discount') discount = state.appliedCoupon.value;
             const total = subtotal + shippingCost - discount; const amount = parseFloat(customerData.amount); const cambio = (['Con Cambio', 'Efectivo'].includes(customerData.payment) && !isNaN(amount) && amount >= total) ? amount - total : 0;
             sendOrderToWhatsApp({ customer: customerData, items: state.cart, subtotal, shippingCost, total, cambio, coupon: state.appliedCoupon }); closeAllModals(); dom.confirmationModal.modal.classList.remove('hidden');
@@ -819,10 +843,11 @@
 
         const registerListeners = () => {
             dom.searchBar.addEventListener('input', filterAndRenderProducts); dom.categoryFilters.addEventListener('click', handleCategoryFilterClick); dom.productList.addEventListener('click', handleProductListClick); dom.cart.list.addEventListener('click', handleCartListClick); dom.mobileCart.list.addEventListener('click', handleCartListClick); dom.cart.clearBtn.addEventListener('click', clearCart); dom.cart.checkoutBtn.addEventListener('click', showOrderModal); dom.mobileCart.checkoutBtn.addEventListener('click', showOrderModal); dom.mobileCart.openBtn.addEventListener('click', () => dom.mobileCart.view.classList.add('active')); dom.mobileCart.closeBtn.addEventListener('click', () => dom.mobileCart.view.classList.remove('active')); dom.flavorModal.options.addEventListener('click', (e) => handleFlavorSelection(e, dom.flavorModal)); dom.qtyFlavorModal.options.addEventListener('click', (e) => handleFlavorSelection(e, dom.qtyFlavorModal));
-            dom.flavorModal.confirmBtn.addEventListener('click', () => { dom.flavorModal.modal.classList.add('hidden'); addToCart(state.currentProduct, 1, state.selectedFlavors); });
-            dom.qtyFlavorModal.confirmBtn.addEventListener('click', () => { const quantity = parseInt(dom.qtyFlavorModal.quantityInput.value); if (quantity > 0) { dom.qtyFlavorModal.modal.classList.add('hidden'); addToCart(state.currentProduct, quantity, state.selectedFlavors); } });
-            dom.extrasModal.modal.addEventListener('click', (e) => { const btn = e.target.closest('.add-extra-btn'); if (btn && !btn.disabled) { const productId = parseInt(btn.dataset.id); const product = ALL_PRODUCTS.find(p => p.id === productId); if (product) { addToCart(product, 1, [], true); btn.textContent = '¡Añadido!'; btn.disabled = true; setTimeout(() => { if (!btn.matches(':hover')) { btn.textContent = 'Añadir'; btn.disabled = false; } }, 1500); } } });
-            dom.extrasModal.modal.addEventListener('mouseout', (e) => { const btn = e.target.closest('.add-extra-btn'); if(btn && btn.disabled && btn.textContent === '¡Añadido!') { btn.textContent = 'Añadir'; btn.disabled = false; } });
+            dom.flavorModal.confirmBtn.addEventListener('click', () => { dom.flavorModal.modal.classList.add('hidden'); addToCart(state.currentProduct, 1, state.selectedFlavors); showToast(`¡${state.currentProduct.name} añadido!`); });
+            dom.qtyFlavorModal.confirmBtn.addEventListener('click', () => { const quantity = parseInt(dom.qtyFlavorModal.quantityInput.value); if (quantity > 0) { dom.qtyFlavorModal.modal.classList.add('hidden'); addToCart(state.currentProduct, quantity, state.selectedFlavors); showToast(`¡${state.currentProduct.name} añadido!`); } });
+            dom.extrasModal.modal.addEventListener('click', (e) => { const btn = e.target.closest('.add-extra-btn'); if (btn && !btn.disabled) { const productId = parseInt(btn.dataset.id); const product = ALL_PRODUCTS.find(p => p.id === productId); if (product) { addToCart(product, 1, [], true); 
+                showToast(`¡${product.name} añadido!`); // Use toast for extras too
+                btn.disabled = true; setTimeout(() => { btn.disabled = false; }, 1500); } } });
             dom.extrasModal.closeBtn.addEventListener('click', closeAllModals); dom.extrasModal.skipBtn.addEventListener('click', closeAllModals); dom.orderModal.form.addEventListener('submit', handleOrderFormSubmit);
             dom.orderModal.paymentSelect.addEventListener('change', () => { const isCash = ['Con Cambio', 'Efectivo'].includes(dom.orderModal.paymentSelect.value); dom.orderModal.amountContainer.classList.toggle('hidden', !isCash); updateCambio(); });
             dom.orderModal.amountInput.addEventListener('input', () => updateCambio()); dom.flavorModal.closeBtn.addEventListener('click', closeAllModals); dom.qtyFlavorModal.closeBtn.addEventListener('click', closeAllModals); dom.orderModal.closeBtn.addEventListener('click', () => { dom.orderModal.form.reset(); dom.orderModal.paymentSelect.dispatchEvent(new Event('change')); closeAllModals(); });
@@ -853,8 +878,6 @@
                 loadState(); 
                 subscribeToSettings(); // Init Firestore subscription
                 
-                // Initial render will happen inside subscribeToSettings once data arrives
-                // but let's do a fallback render first
                 productsToRender = getAvailableProducts(); 
                 renderCategoryFilters(); 
                 filterAndRenderProducts(); 
