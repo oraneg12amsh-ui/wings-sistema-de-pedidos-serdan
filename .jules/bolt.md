@@ -1,0 +1,3 @@
+## 2024-05-18 - Batching DOM insertions with DocumentFragment
+**Learning:** The application extensively uses direct DOM insertions in loops (e.g., rendering products and cart items) using `.appendChild()`. Since this causes layout thrashing and multiple reflows on the main thread, it is a significant performance anti-pattern in vanilla JS applications like this one without a virtual DOM.
+**Action:** Use `DocumentFragment` to batch DOM updates before attaching them to the document to ensure only one reflow/repaint occurs per render cycle.
