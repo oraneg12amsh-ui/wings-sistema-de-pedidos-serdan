@@ -1,0 +1,3 @@
+## 2024-05-18 - Checking JavaScript string templates for missing ARIA labels on dynamic icon-only buttons
+**Learning:** When looking for missing accessibility labels, especially on icon-only buttons, it is crucial to inspect not just the static HTML elements but also the dynamically generated ones within JavaScript string templates, as these interactive elements are frequently rendered conditionally and might miss necessary ARIA attributes.
+**Action:** Always do a comprehensive search using keywords like `button`, `<button`, or `.innerHTML` to identify dynamic elements and verify they have proper `aria-label`s, ensuring complete accessibility coverage.
