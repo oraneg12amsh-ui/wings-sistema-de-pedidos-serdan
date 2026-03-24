@@ -1,0 +1,3 @@
+## 2025-02-14 - Ensure explicit ARIA labels in JavaScript string templates
+**Learning:** In applications rendering complex interactive components (like cart controls and modal item buttons) dynamically via JavaScript string templates, it's easy to overlook accessibility attributes. Screen readers will struggle if dynamically added icon-only buttons lack descriptive labels, even if static HTML elements are properly labeled.
+**Action:** When adding or verifying ARIA labels for accessibility, explicitly inspect and test JavaScript string templates in addition to the static HTML, and use dynamic variable interpolation to make the labels more contextual (e.g., \`aria-label="Eliminar ${item.name} del carrito"\`).
