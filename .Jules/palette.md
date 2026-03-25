@@ -1,0 +1,3 @@
+## 2024-05-24 - Contextual ARIA Labels for Dynamically Rendered UI Elements
+**Learning:** When generating interactive UI components dynamically using JavaScript template literals, standard static `aria-label`s are often insufficient. Injecting dynamic variables (like `aria-label="Eliminar ${item.name} del carrito"`) provides much richer, contextual information for screen reader users, helping them understand exactly what a generic action button (like an 'x' icon or a '+' button) will affect.
+**Action:** When adding accessibility to JS-rendered templates, always check if there's an opportunity to use interpolation (e.g., product names or quantities) to make `aria-label`s more descriptive and specific to the item being manipulated.
