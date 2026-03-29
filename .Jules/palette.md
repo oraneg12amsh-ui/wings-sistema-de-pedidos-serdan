@@ -1,0 +1,3 @@
+## 2024-05-14 - Contextual ARIA Labels for Dynamic Elements
+**Learning:** For accessibility, it's not enough to just add static ARIA labels to dynamically rendered buttons inside loops or maps (like 'add to cart' or 'increase quantity' buttons). Screen reader users need context about *what* they are adding or increasing. Using dynamic variable interpolation in JavaScript templates (e.g., `aria-label="Aumentar cantidad de ${item.name}"`) ensures the label is unique and provides necessary context.
+**Action:** When adding ARIA labels to buttons rendered via JavaScript maps or loops, always check if there is a relevant item property (like `name` or `title`) that can be interpolated into the `aria-label` string to provide context.
