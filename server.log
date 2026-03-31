@@ -1,0 +1,21 @@
+127.0.0.1 - - [31/Mar/2026 17:53:03] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [31/Mar/2026 17:53:37] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [31/Mar/2026 17:53:40] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:53:40] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:53:42] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:53:42] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:53:42] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:53:42] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:53:43] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:53:43] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:54:35] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [31/Mar/2026 17:54:37] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:54:37] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:54:39] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:54:39] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:54:39] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:54:39] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:54:40] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:54:40] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
+127.0.0.1 - - [31/Mar/2026 17:54:41] code 404, message File not found
+127.0.0.1 - - [31/Mar/2026 17:54:41] "GET /&auto=format&fit=crop&w=400 HTTP/1.1" 404 -
