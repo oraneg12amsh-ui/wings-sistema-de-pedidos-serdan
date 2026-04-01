@@ -1,0 +1,3 @@
+## 2024-04-01 - DOM Insertion Optimization with DocumentFragment
+**Learning:** The application heavily dynamically renders lists in JavaScript using loops (`filtered.forEach`, `state.cart.forEach`, `for` loops) and standard `appendChild` directly onto the live DOM (e.g. `dom.productList`, `listEl`, `container`), causing N reflows per list render.
+**Action:** Use `DocumentFragment` to batch DOM node creation within loops before appending the entire fragment to the live DOM in a single operation. This significantly reduces layout thrashing, especially when lists can be long (e.g. all menu items, long order carts, or numerous animated particles).
