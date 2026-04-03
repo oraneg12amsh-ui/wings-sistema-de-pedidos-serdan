@@ -1,0 +1,3 @@
+## 2023-10-27 - Adding ARIA labels to dynamically rendered UI
+**Learning:** When adding ARIA labels to user interfaces constructed dynamically via JavaScript string templates, it's critical to inject contextual information (like the product name) directly into the `aria-label` attribute (e.g., `aria-label="Agregar ${product.name} al carrito"`) so that screen readers can uniquely identify the button rather than reading out a generic action.
+**Action:** Always inspect the rendering logic of list items or modals to ensure that variables present in scope are utilized to provide explicit context to screen readers, instead of relying on the surrounding static HTML structure or visual proximity.
