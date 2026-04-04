@@ -1,0 +1,3 @@
+## 2026-04-04 - Dynamic vs. Static ARIA Contexts in Single-Page Vanilla JS Applications
+**Learning:** For interactive, dynamically-rendered UI lists (like shopping cart items), static or generic ARIA labels ("Disminuir", "Eliminar") provide poor context to screen readers, especially when multiple identical components exist.
+**Action:** Always inject contextual variables (e.g., product names) into ARIA labels using template literals during JavaScript rendering (e.g., `aria-label="Disminuir cantidad de ${item.name}"`), and apply `aria-live="polite"` to dynamically changing spans (like item quantities) so screen reader users hear value changes without focus shifts.
