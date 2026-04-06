@@ -1,0 +1,3 @@
+## 2024-05-24 - Debouncing without removing existing synchronous calls
+**Learning:** Adding a debounced event listener for an input (like a search bar) does not automatically override or replace existing synchronous event listeners attached to the same element or other actions that synchronously read the input value (like category clicks). If both exist, the logic fires twice.
+**Action:** When adding debouncing to an existing flow, explicitly trace all existing triggers that read the input and either remove them or ensure they are also debounced/integrated into the new flow to avoid double-execution.
