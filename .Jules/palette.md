@@ -1,0 +1,3 @@
+## 2024-04-08 - Accessible Cart Modals
+**Learning:** Found an accessibility pattern where dynamic vanilla JS template literal components (like dynamically rendered cart items and add extra item buttons) lacked necessary descriptive ARIA attributes, creating a significant usability barrier for screen readers interacting with the core purchasing flow.
+**Action:** When auditing or implementing vanilla JS single-file applications, explicitly inspect JavaScript string template loops for interactive elements, ensuring context-aware `aria-label` (e.g., `Agregar ${product.name} al carrito`) and `aria-live` attributes are dynamically applied alongside their static HTML counterparts.
