@@ -1,0 +1,4 @@
+
+## 2024-04-09 - Contextual ARIA labels in Vanilla JS Template Literals
+**Learning:** When developing interactive UIs with Vanilla JS and dynamically rendering HTML strings (e.g., using `map` and template literals), it is critical to explicitly inject contextual `aria-label` attributes (e.g., `aria-label="Agregar ${product.name} como extra"`) for icon-only buttons (`+`, `-`, `&times;`). Without this, screen readers announce generic or unintelligible characters ("plus", "minus", "times"), making cart management and item selection inaccessible. Additionally, dynamic count spans must receive `aria-live="polite"` to proactively announce quantity changes.
+**Action:** Always inspect JS template literals that generate interactive UI components, not just static HTML elements. Interpolate component-specific variable names into the ARIA labels to ensure dynamic context is provided to screen readers.
