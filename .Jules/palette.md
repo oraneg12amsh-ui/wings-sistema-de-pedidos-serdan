@@ -1,0 +1,3 @@
+## 2024-04-10 - Adding Context to Dynamic ARIA Labels in Template Literals
+**Learning:** When evaluating accessibility for JS-rendered applications (like Vanilla JS or template literals), simply adding a static `aria-label="Delete"` to dynamically generated rows (like cart items or product lists) creates ambiguity for screen reader users. The application state holds the necessary context (e.g., `product.name` or `item.name`).
+**Action:** Always inspect the surrounding template string scope. Interject context-specific variables into the ARIA label (e.g., `aria-label="Agregar ${product.name} al carrito"`) to provide precise, descriptive actions rather than relying entirely on generic labels.
