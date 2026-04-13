@@ -1,0 +1,3 @@
+## 2024-04-13 - Layout Thrashing in List Rendering
+**Learning:** The single-file application `index.html` frequently renders lists of items (products, cart items, decorative hearts) using `.innerHTML` on loops or by repetitively calling `.appendChild()` on live DOM nodes within `forEach` or `for` loops. This causes layout thrashing (multiple synchronous reflows and repaints).
+**Action:** Always refactor iterative DOM insertions to use a `DocumentFragment` first. Append elements to the fragment within the loop, and append the fragment to the live DOM node once after the loop. This batches the insertions and prevents layout thrashing.
