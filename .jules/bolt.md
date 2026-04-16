@@ -1,0 +1,3 @@
+## 2023-10-27 - DocumentFragment for DOM Batching
+**Learning:** In vanilla JavaScript, repeatedly appending elements directly to the live DOM within a loop (like `productList.appendChild(card)` in a `.forEach`) causes severe layout thrashing and performance degradation, especially as lists grow.
+**Action:** Always create a `DocumentFragment` before loops that generate multiple DOM nodes. Append the individual nodes to the fragment during the loop, and then perform a single `.appendChild()` of the fragment to the live DOM container after the loop concludes to batch the insertion and minimize reflows.
