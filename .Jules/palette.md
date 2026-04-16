@@ -1,0 +1,3 @@
+## 2023-10-27 - Dynamic Vanilla JS Accessibility
+**Learning:** Adding accessibility attributes (like `aria-label`) to dynamic UI elements in Vanilla JS requires modifying string template literals directly within the rendering functions, rather than relying on DOM manipulation post-render. Furthermore, dynamic `aria-labels` should interpolate the target element's context (e.g. `aria-label="Aumentar cantidad de ${item.name}"`) to give screen reader users clarity.
+**Action:** Always inspect JS template literals for UI rendering logic and apply accessibility attributes (like `aria-label` and `aria-live`) dynamically alongside HTML modifications.
