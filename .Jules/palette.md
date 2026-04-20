@@ -1,0 +1,3 @@
+## 2024-05-18 - ARIA Attributes in Vanilla JS Template Strings
+**Learning:** Adding ARIA attributes to vanilla JS template strings is crucial for making dynamically generated icon-only buttons accessible. Screen readers cannot infer the purpose of buttons that only contain elements like `+`, `-`, or `&times;` unless explicit `aria-label` attributes are provided. Additionally, dynamic content updates like quantities or cart counts should use `aria-live="polite"` to notify users of changes.
+**Action:** When creating or modifying JavaScript functions that generate HTML strings, proactively identify icon-only buttons and dynamic text elements, and embed semantic `aria-label` and `aria-live` attributes directly within the string interpolation logic.
