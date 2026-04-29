@@ -1,0 +1,5 @@
+## 2024-05-24 - Playwright A11y Verification with External ES Modules
+
+**Learning:** When attempting to verify DOM structure or ARIA attributes using Playwright with local `file://` protocol, external ES module imports (like Firebase from a CDN) can cause Playwright's JavaScript execution context to hang or timeout if the network blocks them. Furthermore, internal JS application state variables (like `state`) are scoped within the module and are inaccessible to `page.evaluate()` from the global `window` object when using standard ES module patterns.
+
+**Action:** To test frontend a11y UI state in local files with ES modules, programmatically strip the `type="module"` attribute and external `import` statements using `re.sub` in python before loading a temporary HTML copy. Then, interact directly with the DOM (e.g., clicking `.glass-card[data-id='10']` for a non-configurable product to trigger the cart UI) rather than attempting to inject state manually via `page.evaluate()`. This reliably forces the UI into the desired state for a11y verification.
