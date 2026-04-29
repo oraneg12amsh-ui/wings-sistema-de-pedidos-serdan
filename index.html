@@ -477,7 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const getAvailableProducts = () => { return ALL_PRODUCTS; }; 
-    const addToCart = (product, quantity = 1, flavors = [], bypass = false) => { const existing = state.cart.find(i => i.id === product.id && JSON.stringify(i.flavors) === JSON.stringify(flavors)); existing ? existing.quantity += quantity : state.cart.push({ ...product, quantity, flavors }); renderCart(); if (['Paquetes', 'Combos', 'Promociones', 'Alitas'].includes(product.category) && !bypass) dom.extrasModal.modal.classList.remove('hidden'); showToast("Producto agregado 🛸"); };
+    // Optimization: Use areArraysEqual helper to perform shallow comparison of flavor arrays, avoiding the performance overhead of repeated JSON.stringify calls within the find iteration.
+    const areArraysEqual = (a, b) => { if (!a || !b) return a === b; if (a.length !== b.length) return false; for (let i = 0; i < a.length; i++) { if (a[i] !== b[i]) return false; } return true; };
+    const addToCart = (product, quantity = 1, flavors = [], bypass = false) => { const existing = state.cart.find(i => i.id === product.id && areArraysEqual(i.flavors, flavors)); existing ? existing.quantity += quantity : state.cart.push({ ...product, quantity, flavors }); renderCart(); if (['Paquetes', 'Combos', 'Promociones', 'Alitas'].includes(product.category) && !bypass) dom.extrasModal.modal.classList.remove('hidden'); showToast("Producto agregado 🛸"); };
     const removeFromCart = (idx) => { state.cart.splice(idx, 1); renderCart(); };
     const updateQty = (idx, delta) => { if(state.cart[idx]) { state.cart[idx].quantity += delta; if(state.cart[idx].quantity <= 0) state.cart.splice(idx, 1); renderCart(); } };
     
