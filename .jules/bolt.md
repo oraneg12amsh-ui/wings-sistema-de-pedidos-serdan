@@ -1,0 +1,3 @@
+## 2024-05-24 - Centralize and Memoize Cart Calculations
+**Learning:** Redundant `state.cart.reduce` iterations for order calculations (subtotal) were identified across multiple functions (`updateTotals`, `updateCambio`, `handleCouponChange`, and the form `submit` event listener). In large carts, this O(n) operation called repeatedly creates a measurable performance bottleneck.
+**Action:** Centralizing these calculations into a single `getCartTotals()` function that calculates subtotal, shipping, discount, total, and item count in one pass. This avoids redundant loop iterations and improves calculation performance.
