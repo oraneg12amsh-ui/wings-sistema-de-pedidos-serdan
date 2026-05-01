@@ -1,0 +1,3 @@
+## 2024-05-01 - Identifying Dynamic Icon-Only Buttons
+**Learning:** In Vanilla JS applications that dynamically generate complex HTML structures using template literals (like `index.html` here), critical icon-only buttons (like `+`, `-`, or `&times;` inside cart rows) are often hidden within large JS strings. Static HTML analysis will miss them.
+**Action:** Always search within the `<script>` blocks (specifically functions like `renderList` or `createHTML`) for structural patterns like `<button[^>]*>[^a-zA-Z]*</button>` to find dynamically rendered elements that lack accessibility labels. Use `sed` to extract and inject attributes directly into the interpolation logic.
