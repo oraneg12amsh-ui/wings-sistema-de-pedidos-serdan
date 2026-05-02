@@ -1,0 +1,3 @@
+## 2024-05-16 - Add ARIA Labels to Icon-Only Buttons
+**Learning:** Icon-only buttons (like mobile carts, modal close buttons, social links) and dynamically generated UI elements often lack accessible names, making them invisible or confusing for screen reader users. In vanilla JS applications, ARIA labels must be injected directly into the string interpolation logic during dynamic DOM generation.
+**Action:** Always verify both static HTML elements and dynamically generated string templates for missing `aria-label` attributes on icon-only interactive elements to ensure full keyboard and screen reader accessibility.
