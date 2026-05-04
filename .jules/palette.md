@@ -1,0 +1,3 @@
+## 2024-05-04 - Adding ARIA labels to Vanilla JS dynamically rendered elements
+**Learning:** When making accessibility enhancements in a pure Vanilla JS project that heavily relies on long, minified-style template strings for rendering (e.g., `renderList`), directly inserting the `aria-label` attribute into the template literal string is the most robust and performant way to ensure accessibility, rather than attempting post-render DOM manipulation with `querySelectorAll`.
+**Action:** Always inject ARIA attributes natively into the DOM-generating template string functions when available, prioritizing this over post-render mutations to avoid layout thrashing and ensure elements are accessible from the exact moment they enter the DOM.
