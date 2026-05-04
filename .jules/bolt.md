@@ -1,0 +1,3 @@
+## 2025-02-18 - Batching DOM Insertions in Vanilla JS
+**Learning:** Using `.appendChild()` directly inside a loop on a live DOM container causes severe layout thrashing and repaints in Vanilla JS applications, significantly impacting performance, particularly when rendering lists of products or cart items.
+**Action:** Always utilize a `DocumentFragment` (`document.createDocumentFragment()`) to batch DOM insertions within loops. Append all generated elements to the fragment first, and then append the fragment to the live DOM container in a single operation. This ensures only one reflow/repaint occurs, regardless of the number of items inserted.
