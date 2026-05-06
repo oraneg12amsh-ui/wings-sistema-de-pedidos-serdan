@@ -1,0 +1,3 @@
+## 2024-05-24 - [Optimize Cart Totals Calculation]
+**Learning:** Multiple redundant `reduce()` iterations over the cart array in `index.html` created a performance bottleneck during frequent state updates (e.g., changing quantities, applying coupons, and rendering views). Since the operations are simple aggregations, a single O(n) loop traversing the array once is significantly faster, especially as the cart grows.
+**Action:** Replace multiple `.reduce()` calls with a single `getCartTotals()` function that calculates all necessary aggregates in one pass, returning an object. Destructure this object wherever the totals are needed.
