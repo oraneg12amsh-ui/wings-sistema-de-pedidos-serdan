@@ -1,0 +1,3 @@
+## 2024-05-11 - Array.reduce vs for loops for Cart Calculations
+**Learning:** Performing multiple redundant `.reduce()` calls on arrays inside frequently called UI update functions (like `renderCart`, `updateTotals`, `updateCambio`) causes unnecessary iterations. A single `for` loop to compute multiple aggregates (e.g. subtotal and count) is about ~10x faster for large datasets than chaining or executing multiple `.reduce()` iterations.
+**Action:** Centralize cart calculations into a `getCartTotals()` function that uses a single fast `for` loop to compute `sub`, `ship`, `disc`, `total`, and `count`, and reuse this object instead of doing separate `.reduce()` calls.
