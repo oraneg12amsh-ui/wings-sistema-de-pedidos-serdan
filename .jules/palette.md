@@ -1,0 +1,3 @@
+## 2024-05-13 - Added ARIA labels to icon-only buttons
+**Learning:** Adding ARIA labels to icon-only buttons (like `&times;` close buttons or `+`/`-` quantity controls) is a foundational accessibility fix that significantly improves screen reader usability without altering visual design. In vanilla JS applications where templates are generated dynamically, `aria-label`s must be explicitly interpolated with relevant dynamic data (e.g., product names) to provide sufficient context to users.
+**Action:** Always verify both static and dynamically rendered icon-only buttons during UX audits and ensure context-specific `aria-label`s are applied where visual text is absent.
