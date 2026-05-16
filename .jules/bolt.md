@@ -1,0 +1,4 @@
+
+## 2024-05-18 - Batching DOM Manipulations with DocumentFragment
+**Learning:** Frequent, repetitive DOM insertions (like looping through elements and calling `appendChild` on a live DOM container) cause layout thrashing and forced synchronous repaints. This app had three primary rendering functions (`createStars`, `filterAndRenderProducts`, and `renderList`) doing exactly this. Using `DocumentFragment` to batch these insertions memory-side before a single attachment to the real DOM provides a low-effort, high-impact rendering performance boost, significantly improving time-to-interactive for lists.
+**Action:** When rendering lists of dynamically created elements, always initialize a `DocumentFragment`, loop and append to the fragment, and append the fragment to the live DOM container at the end.
