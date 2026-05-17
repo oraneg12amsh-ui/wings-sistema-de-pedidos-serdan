@@ -584,7 +584,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners
-    dom.searchBar.addEventListener('input', () => { filterAndRenderProducts(); });
+    // ⚡ Bolt: Debounce search input to prevent excessive filtering and DOM re-renders while typing.
+    // Impact: Reduces CPU usage and layout thrashing by grouping fast keystrokes into a single update.
+    let searchTimeout;
+    dom.searchBar.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => { filterAndRenderProducts(); }, 300);
+    });
     
     dom.cart.clearBtn.addEventListener('click', () => {
         if(confirm('¿Estás seguro de vaciar tu carrito? 💥')) {
