@@ -1,0 +1,3 @@
+## 2024-05-24 - Batching DOM Insertions with DocumentFragment
+**Learning:** Appending items directly to the DOM inside loops (e.g., in `filterAndRenderProducts` and `renderList`) causes layout thrashing and triggers multiple repaints, severely impacting rendering performance for lists or multiple elements. Using a `DocumentFragment` to batch these insertions in memory before appending the entire fragment to the DOM minimizes reflows and improves execution speed.
+**Action:** Always batch DOM element creation and insertions using `document.createDocumentFragment()` when rendering lists, grids, or particle systems (like stars) instead of appending individual nodes inside loops.
