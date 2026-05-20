@@ -584,7 +584,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners
-    dom.searchBar.addEventListener('input', () => { filterAndRenderProducts(); });
+    // ⚡ Bolt Optimization: Debounce search input to prevent layout thrashing
+    // Impact: Reduces filterAndRenderProducts calls from O(keystrokes) to O(1) per search,
+    // lowering main thread CPU usage and eliminating micro-stutters during typing.
+    let searchTimeout;
+    dom.searchBar.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            filterAndRenderProducts();
+        }, 300);
+    });
     
     dom.cart.clearBtn.addEventListener('click', () => {
         if(confirm('¿Estás seguro de vaciar tu carrito? 💥')) {
