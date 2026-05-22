@@ -584,7 +584,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners
-    dom.searchBar.addEventListener('input', () => { filterAndRenderProducts(); });
+    let searchTimeout;
+    dom.searchBar.addEventListener('input', () => {
+        // ⚡ Bolt Optimization: Debounce search input to prevent layout thrashing
+        // and reduce CPU load caused by triggering filterAndRenderProducts on every keystroke.
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            filterAndRenderProducts();
+        }, 300);
+    });
     
     dom.cart.clearBtn.addEventListener('click', () => {
         if(confirm('¿Estás seguro de vaciar tu carrito? 💥')) {
