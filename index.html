@@ -584,7 +584,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners
-    dom.searchBar.addEventListener('input', () => { filterAndRenderProducts(); });
+    // ⚡ Bolt Performance Optimization: Debounce search input
+    // Wrapping the search filter in a 300ms setTimeout reduces CPU load and prevents layout thrashing
+    // caused by triggering filterAndRenderProducts() on every single keystroke.
+    let searchTimeout;
+    dom.searchBar.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            filterAndRenderProducts();
+        }, 300);
+    });
     
     dom.cart.clearBtn.addEventListener('click', () => {
         if(confirm('¿Estás seguro de vaciar tu carrito? 💥')) {
