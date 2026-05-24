@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessibility for Dynamic Cart and Icon-Only Modals
+**Learning:** In Spanish language applications with heavily interactive Vanilla JS template literals, dynamically generated icon-only buttons (like quantity increasers `+`, decreasers `-`, and `&times;` close buttons) severely lack screen reader context. The `aria-label` must explicitly match the application's locale (Spanish) rather than defaulting to English, as users navigating via assistive tech require native language instructions to understand cart management.
+**Action:** Always scan for generic icon symbols (`+`, `-`, `&times;`) inside JS template literals and apply strictly localized `aria-label`s corresponding to the app's primary language.
