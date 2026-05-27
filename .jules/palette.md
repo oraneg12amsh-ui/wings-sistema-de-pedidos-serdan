@@ -1,0 +1,3 @@
+## 2026-05-27 - Icon-only button accessibility in Spanish UI
+**Learning:** This application relies on icon-only buttons for critical cart operations (mobile cart toggle, close modals, quantity adjust, remove item, add extra item). Playwright testing and manual review showed these lacked explicit screen reader labels. Because the application targets Spanish-speaking users ('Tu Pedido', 'Cerrado', etc.), the `aria-label` attributes must be localized to Spanish.
+**Action:** Always add Spanish `aria-label` attributes to icon-only controls (e.g. `aria-label="Cerrar carrito"`, `aria-label="Aumentar cantidad"`) to ensure accessibility matches the primary application language.
