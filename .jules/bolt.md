@@ -1,0 +1,3 @@
+## 2024-05-28 - Optimize DOM insertions and Event Listeners
+**Learning:** Appending directly to the DOM in a loop (e.g., `dom.productList.appendChild(card)` or `listEl.appendChild(cartItem)`) causes frequent layout thrashing and reflows. Adding a debounce to high-frequency events like input keystrokes significantly reduces CPU load and prevents unnecessary calculations and DOM modifications.
+**Action:** Always batch DOM insertions using `DocumentFragment` when rendering items in a loop. Add debounce (e.g., via `setTimeout`) for frequently triggering events like search input to avoid recalculating the layout or rerendering the UI on every single keystroke.
