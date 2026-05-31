@@ -1,0 +1,3 @@
+## 2023-10-27 - Icon-only buttons lacking ARIA labels
+**Learning:** Multiple interactive components (like modal close buttons, increment/decrement controls, and mobile navigation toggles) relied exclusively on SVG icons or symbols (e.g., `&times;`, `+`, `-`) without any text equivalent, making them inaccessible to screen readers in this localized (Spanish) application.
+**Action:** When working on generic template code or dynamically injected HTML structures (like `renderList`), proactively audit icon-only `<button>` tags for `aria-label` attributes and ensure the labels are correctly localized to the app's primary language.
