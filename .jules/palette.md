@@ -1,0 +1,3 @@
+## 2026-06-03 - Icon-only buttons lacking ARIA labels
+**Learning:** In dynamically generated HTML interfaces built with template literals inside JavaScript (like `renderExtrasModal` and `renderList`), accessibility is often overlooked. Specifically, icon-only buttons (`+`, `-`, `&times;`) frequently lack proper `aria-label`s, rendering them inaccessible to screen readers.
+**Action:** When auditing vanilla JavaScript single-page applications, thoroughly inspect the JavaScript logic that constructs DOM elements, particularly lists and modals, to ensure accessibility attributes are included dynamically. Use specific Spanish translations (e.g., "Añadir extra", "Disminuir cantidad") in a localized codebase.
