@@ -1,0 +1,3 @@
+## 2024-05-24 - Icon-only buttons lacking ARIA labels
+**Learning:** Icon-only controls in this application (like mobile cart toggle, increase/decrease quantities, close modals, and close cart) often lack `aria-label` attributes. Screen reader users would hear these as empty buttons or raw text (like "-" or "+"). Since the primary language of the application is Spanish, the `aria-label` values must be localized appropriately (e.g. "Cerrar carrito").
+**Action:** When adding new icon-only controls, always include a descriptive, localized `aria-label`. For the current PR, add ARIA labels to the primary icon buttons.
