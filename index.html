@@ -583,8 +583,23 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTotals();
     };
 
+    // Utilities
+    const debounce = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
     // Event Listeners
-    dom.searchBar.addEventListener('input', () => { filterAndRenderProducts(); });
+    // Performance optimization: Debouncing search to prevent expensive DOM re-renders on every keystroke
+    const debouncedFilterAndRender = debounce(() => { filterAndRenderProducts(); }, 300);
+    dom.searchBar.addEventListener('input', debouncedFilterAndRender);
     
     dom.cart.clearBtn.addEventListener('click', () => {
         if(confirm('¿Estás seguro de vaciar tu carrito? 💥')) {
