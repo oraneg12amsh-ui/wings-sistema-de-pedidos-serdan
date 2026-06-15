@@ -1,0 +1,3 @@
+## 2026-06-15 - Localized Accessibility is Essential
+**Learning:** Adding ARIA labels to dynamically generated DOM elements (like cart items in `renderList`) requires updating the template strings within the JavaScript logic, not just static HTML tags. Furthermore, it is critical to ensure that all `aria-label` texts match the primary language of the application (e.g., using "Aumentar cantidad" instead of "Increase quantity" in a Spanish application) to maintain a cohesive experience for screen reader users.
+**Action:** Always verify the language of the surrounding content and explicitly apply localized text for accessibility tags, and trace icon-only buttons back to their source generators when they appear dynamically.
