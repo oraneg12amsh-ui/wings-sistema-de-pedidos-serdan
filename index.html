@@ -364,6 +364,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.productList.innerHTML = ''; 
         if (filtered.length === 0) { dom.productList.innerHTML = `<p class="text-green-300/50 col-span-full text-center py-10">Radar vacío, intenta buscar otra cosa 🛰️</p>`; return; } 
         
+        // Performance optimization: Batch DOM insertions using DocumentFragment
+        // Expected impact: Reduces layout thrashing and reflows from O(N) to O(1) recalculation
+        const fragment = document.createDocumentFragment();
+
         filtered.forEach(product => { 
             const status = getProductStatus(product);
             const isSoldOut = !status.available;
@@ -386,8 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button data-id="${product.id}" class="add-to-cart-btn w-full ${isSoldOut ? 'bg-slate-800 text-slate-500 border-slate-800 cursor-not-allowed' : 'bg-slate-800 hover:bg-brand-primary hover:text-white text-green-200 border-slate-700 hover:border-brand-primary'} font-bold py-3 rounded-xl transition-all duration-300 text-sm border disabled:opacity-70" ${!isStoreCurrentlyOpen || isSoldOut ? 'disabled' : ''}>${!isStoreCurrentlyOpen ? 'Cerrado' : status.label}</button>
                 </div>
             `; 
-            dom.productList.appendChild(card); 
+            fragment.appendChild(card);
         }); 
+
+        dom.productList.appendChild(fragment);
     };
 
     const renderExtrasModal = () => { const extras = ALL_PRODUCTS.filter(p => p.category === 'Extras' && !hiddenProducts.includes(p.id)); const bebidas = ALL_PRODUCTS.filter(p => p.category === 'Bebidas' && !hiddenProducts.includes(p.id)); const createItemHTML = (product) => `<div class="flex justify-between items-center bg-slate-800/50 p-3 rounded-xl border border-slate-700/50 hover:border-brand-primary/30 transition-colors"><div><span class="font-semibold text-slate-200 block">${product.name}</span><span class="text-brand-primary text-sm font-bold">${formatCurrency(product.price)}</span></div><button data-id="${product.id}" class="add-extra-btn bg-slate-700 hover:bg-brand-primary hover:text-white text-white font-bold w-8 h-8 rounded-full flex items-center justify-center transition-all" ${!isStoreCurrentlyOpen ? 'disabled' : ''}>+</button></div>`; if(dom.extrasModal.listExtras) dom.extrasModal.listExtras.innerHTML = extras.map(createItemHTML).join(''); if(dom.extrasModal.listBebidas) dom.extrasModal.listBebidas.innerHTML = bebidas.map(createItemHTML).join(''); };
